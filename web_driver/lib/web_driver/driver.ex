@@ -1,5 +1,5 @@
 defmodule WebDriver.Driver do
-  use Hound.Helpers
+  use Hound
 
   def start_link() do
     Agent.start_link(&new/0)
@@ -7,7 +7,7 @@ defmodule WebDriver.Driver do
 
   def new() do
     capabilities = setup()
-    Hound.new_session(driver: capabilities)
+    Hound.start_session(driver: capabilities)
   end
 
   def setup() do
