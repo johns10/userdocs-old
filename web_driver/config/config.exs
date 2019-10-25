@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :driver, key: :value
+#     config :web_driver, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:driver, :key)
+#     Application.get_env(:web_driver, :key)
 #
 # You can also configure a third-party app:
 #

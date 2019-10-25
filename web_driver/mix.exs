@@ -1,9 +1,9 @@
-defmodule Driver.MixProject do
+defmodule WebDriver.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :driver,
+      app: :web_driver,
       version: "0.1.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
