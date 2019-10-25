@@ -7,7 +7,7 @@ defmodule WebDriver.Driver do
 
   def new() do
     capabilities = setup()
-    Hound.start_session(driver: capabilities)
+    Hound.start_session()
   end
 
   def setup() do
