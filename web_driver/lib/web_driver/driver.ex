@@ -1,5 +1,5 @@
 defmodule WebDriver.Driver do
-  use Hound
+  use Hound.Helpers
 
   def start_link() do
     Agent.start_link(&new/0)
@@ -14,6 +14,8 @@ defmodule WebDriver.Driver do
     %{
       browserName: "chrome",
       server: true,
+      host: "http://172.18.102.2",
+      port: 4444,
       chromeOptions: %{
         "args" => ["--headless", "--disable-gpu"]
     }}
