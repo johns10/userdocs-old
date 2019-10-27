@@ -2,7 +2,9 @@ defmodule WebDriverTest do
   use ExUnit.Case
   doctest WebDriver
 
-  test "greets the world" do
-    assert WebDriver.hello() == :world
+  test "new creates a session" do
+    assert WebDriver.Driver.new()
   end
+
+
 end

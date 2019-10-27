@@ -1,23 +1,47 @@
 defmodule WebDriver.Driver do
   use Hound.Helpers
 
-  def start_link() do
-    Agent.start_link(&new/0)
-  end
-
   def new() do
     capabilities = setup()
-    Hound.start_session()
+    Hound.start_session(driver: capabilities)
   end
 
   def setup() do
     %{
-      browserName: "chrome",
       server: true,
-      host: "http://172.18.102.2",
+      host: "localhost",
       port: 4444,
+      #retry_time: 1000000,
+      #genserver_timeout: 75000000000,
+      driver: "chrome_driver",
+      browserName: "chrome",
+      browser: "chrome",
       chromeOptions: %{
-        "args" => ["--headless", "--disable-gpu"]
-    }}
+          "args" => ["--no-sandbox"],
+      }
+  }
   end
+
+  def wait_until_available(strategy, selector, retries) do
+    h_find_element(strategy, selector, retries)
+  end
+
+  #-------------Hound Wrappers-------------------------#
+
+  def h_navigate_to(address) do
+    navigate_to(address)
+  end
+
+  def h_find_element(strategy, selectors, retries) do
+    find_element(strategy, selectors, retries)
+  end
+
+  def h_click(element) do
+    click(element)
+  end
+
+  def h_fill_field(element, input) do
+    fill_field(element, input)
+  end
+
 end
