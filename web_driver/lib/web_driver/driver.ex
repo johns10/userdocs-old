@@ -16,9 +16,9 @@ defmodule WebDriver.Driver do
       driver: "chrome_driver",
       browserName: "chrome",
       browser: "chrome",
-      chromeOptions: %{
-          "args" => ["--no-sandbox"],
-      }
+      #chromeOptions: %{
+      #    "args" => ["--no-sandbox"],
+      #}
   }
   end
 
