@@ -21,7 +21,8 @@ defmodule WebDriver.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:hound, "~> 1.0"}
+      { :hound, "~> 1.0" }
+      { :script, path: "../script" },
     ]
   end
 end

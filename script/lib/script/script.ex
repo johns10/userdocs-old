@@ -6,9 +6,10 @@ defmodule Script.Script do
     script: the script to concatenate additional entries to.  Initially should
     be empty
     list of script maps, each with a type and a list of args
-    types: a list of types with a type, prototype, and list of valid parameters
+    types: a list of script types with a type, prototype, and list of valid
+    parameters
 
-    Returns the interpolated string
+    Returns the interpolated strings for each script, concatenated
     """
     @doc since: "1.9.2"
     #TODO: Re-implement as a prototype
@@ -55,6 +56,14 @@ defmodule Script.Script do
     EEx.eval_string(prototype, args)
   end
 
+  @doc """
+    Implements reverse concatenation
+    tail: tail of the string to return
+    head: head of the string to return
+
+    Returns the prepended head
+    """
+    @doc since: "1.9.2"
   def prepend(tail, []) do
     tail
   end
