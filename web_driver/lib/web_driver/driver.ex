@@ -22,10 +22,6 @@ defmodule WebDriver.Driver do
   }
   end
 
-  def wait_until_available(strategy, selector, retries) do
-    h_find_element(strategy, selector, retries)
-  end
-
   #-------------Hound Wrappers-------------------------#
 
   def h_navigate_to(address) do
@@ -44,4 +40,14 @@ defmodule WebDriver.Driver do
     fill_field(element, input)
   end
 
+  def h_execute_script(script_function, function_args) do
+    execute_script(script_function, function_args)
+  end
+
+  def h_element_displayed?(request = { status, element }) do
+    { element_displayed?(element), element }
+  end
+  def h_element_displayed?(element) do
+    element_displayed?(element)
+  end
 end
