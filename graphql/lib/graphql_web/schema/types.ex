@@ -13,4 +13,8 @@ defmodule GraphqlWeb.Schema.Types do
     field(:name, :string)
   end
 
+  object :state do
+    field(:pid, :string)
+  end
+
 end

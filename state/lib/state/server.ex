@@ -3,10 +3,26 @@ defmodule State.Server do
   use GenServer
 
   def start_link() do
-    GenServer.start_link(__MODULE__, nil)
+    IO.puts("STarting link")
+    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
+  def get(type, keys, includes, pid \\ __MODULE__) do
+    GenServer.call(pid, { :get, type, keys, includes })
+  end
+
+  def create(type, key, value, pid \\ __MODULE__) do
+    GenServer.call(pid, { :create, type, key, value })
+  end
+
+  def update(type, key, value, pid \\ __MODULE__) do
+    GenServer.call(pid, { :update, type, key, value })
+  end
+
+  #################### Server API #########################
+
   def init(_) do
+    IO.puts("Initing")
     { :ok, State.State.new_state() }
   end
 

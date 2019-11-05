@@ -4,22 +4,26 @@ defmodule GraphqlWeb.Schema do
   import_types(GraphqlWeb.Schema.Types)
 
   query do
+    field :new, type: :state do
+      resolve(&Graphql.State.StateResolver.new/2)
+    end
+
     field :pages, list_of(:page) do
-      resolve(&Graphql.Page.PageResolver.all/2)
-    end
-
-    field :page, type: :page do
-      arg(:id, non_null(:id))
-      resolve(&Graphql.Page.PageResolver.find/2)
-    end
-
-    field :procedures, list_of(:procedure) do
-      resolve(&Graphql.Procedure.ProcedureResolver.all/2)
-    end
-
-    field :procedure, :procedure do
-      arg(:email, non_null(:string))
-      resolve(&Graphql.Procedure.ProcedureResolver.find/2)
+      arg(:ids, list_of(:id))
+      resolve(&Graphql.Page.PageResolver.get/2)
     end
   end
+
+  mutation do
+
+    @desc "Create a page"
+    field :create_page, type: :page do
+      arg(:url, non_null(:string))
+      arg(:id, non_null(:id))
+
+      resolve &Graphql.Page.PageResolver.create/3
+    end
+
+  end
+
 end

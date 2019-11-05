@@ -1,11 +1,14 @@
 defmodule Graphql.Page.PageResolver do
-  alias Graphql.Accounts                    #import lib/graphql/accounts/accounts.ex as Accounts
 
-  def all(_args, _info) do
-    {:ok, Accounts.list_users()}
+  @graphql_type :page
+
+  def get(args, %{context: %{ state: state }}) do
+    Graphql.Helpers.get(state, args, @graphql_type)
   end
 
-  def find(%{id: id}, _info) do
-    { :ok }
+  def create(_parent, args, %{context: %{ state: state }}) do
+    Graphql.Helpers.create(state, args, @graphql_type)
+    |> IO.inspect()
   end
+
 end

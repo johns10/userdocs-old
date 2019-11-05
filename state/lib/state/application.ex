@@ -3,7 +3,6 @@ defmodule State.Application do
   use Application
 
   def start(_type, _args) do
-
     import Supervisor.Spec
 
     children = [
@@ -12,9 +11,10 @@ defmodule State.Application do
 
     options = [
       name: State.Supervisor,
-      strategy: :simple_one_for_one,
+      strategy: :one_for_one,
     ]
 
-    Supervisor.start_link(children, options)
+    { :ok, pid } = Supervisor.start_link(children, options)
   end
+
 end

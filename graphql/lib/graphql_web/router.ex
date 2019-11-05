@@ -3,6 +3,7 @@ defmodule GraphqlWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug GraphqlWeb.Context
   end
 
   scope "/api" do
