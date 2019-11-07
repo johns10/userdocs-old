@@ -3,26 +3,28 @@ defmodule State.Server do
   use GenServer
 
   def start_link() do
-    IO.puts("STarting link")
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
-  end
-
-  def get(type, keys, includes, pid \\ __MODULE__) do
-    GenServer.call(pid, { :get, type, keys, includes })
   end
 
   def create(type, key, value, pid \\ __MODULE__) do
     GenServer.call(pid, { :create, type, key, value })
   end
 
+  def get(type, keys, includes, pid \\ __MODULE__) do
+    GenServer.call(pid, { :get, type, keys, includes })
+  end
+
   def update(type, key, value, pid \\ __MODULE__) do
     GenServer.call(pid, { :update, type, key, value })
+  end
+
+  def delete(type, key, pid \\ __MODULE__) do
+    GenServer.call(pid, { :delete, type, key })
   end
 
   #################### Server API #########################
 
   def init(_) do
-    IO.puts("Initing")
     { :ok, State.State.new_state() }
   end
 
@@ -40,4 +42,10 @@ defmodule State.Server do
     { state, result } = State.State.update(state, type, key, value)
     { :reply, result, state }
   end
+
+  def handle_call({ :delete, type, key }, _from, state) do
+    { state, key } = State.State.delete(state, type, key)
+    { :reply, key, state }
+  end
+
 end

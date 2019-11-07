@@ -3,104 +3,67 @@ defmodule State.State do
     step_type: %{
       navigate: %{
         type: :step_type,
-        attributes: %{
-          args: [:strategy, :selector]
-
-        }
+        args: [:strategy, :selector]
       },
       wait: %{
         type: :step_type,
-        attributes: %{
-          args: [:strategy, :selector]
-        }
+        args: [:strategy, :selector]
       },
       click: %{
         type: :step_type,
-        attributes: %{
-          args: [:strategy, :selector]
-        }
+        args: [:strategy, :selector]
       },
       fill_field: %{
         type: :step_type,
-        attributes: %{
-          args: [:strategy, :selector, :text]
-        }
+        args: [:strategy, :selector, :text]
       },
       javascript: %{
         type: :step_type,
-        attributes: %{
-          args: [:procedure, :types, :text]
-        }
+        args: [:procedure, :types, :text]
       }
     },
     page: %{
       default: %{
         type: :page,
-        attributes: %{
-          url: "www.google.com"
+        url: "www.google.com",
+        procedure: :default_procedure
         },
-        relationships: %{
-          procedure: :default_procedure
-        }
-      },
       default2: %{
         type: :page,
-        attributes: %{
-          url: "www.msn.com"
-        },
-        relationships: %{
-          procedure: :default_procedure
-        }
+        url: "www.msn.com",
+        procedure: :default_procedure
       }
     },
     procedure: %{
       default_procedure: %{
         type: :procedure,
-        attributes: %{
-          name: "Procedure Name"
-        },
-        relationships: %{
-          step: [:default],
-          page: [:default]
-        }
+        name: "Procedure Name",
+        steps: [:default]
       },
       default_procedure_2: %{
         type: :procedure,
-        attributes: %{
-          name: "Procedure Name 2"
-        },
-        relationships: %{
-          step: [:default, :default2],
-          page: [:default]
-        }
+        name: "Procedure Name 2",
+        steps: [:default, :default2],
       }
     },
     step: %{
       default: %{
         type: :step,
-        attributes: %{
-          strategy: :xpath,
-          args: [
-            selector:
-              ~s|/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']|
-          ]
-        },
-        relationships: %{
-          step_type: :wait
-        }
+        strategy: :xpath,
+        args: [
+          selector:
+            ~s|/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']|
+        ],
+        step_type: :wait
       },
       default2: %{
         type: :step,
-        attributes: %{
-          strategy: :xpath,
-          args: [
-            selector:
-              ~s|/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']|
-          ]
-        },
-        relationships: %{
-          step_type: :wait
-        }
+        strategy: :xpath,
+        args: [
+          selector:
+            ~s|/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']|
+        ],
+        step_type: :wait
       }
     }
   )
@@ -121,9 +84,10 @@ defmodule State.State do
   def get(state, type, keys, includes) do
     #IO.puts("Getting Data of type #{type} with keys:")
     #IO.inspect(keys)
-    get_data_type({state, type, keys, includes})
+    { state, data, includes } = get_data_type({state, type, keys, includes})
     |> get_by_ids()
-    |> get_relationships
+    #|> get_relationships()
+    { state, data }
   end
 
   def update(state, type, key, value) do
@@ -137,10 +101,11 @@ defmodule State.State do
 
   def delete(state, type, key) do
     #IO.puts("Deleting #{type} -> key")
-    state
+    state = state
     |> Map.pop(type)
     |> delete_object(key)
     |> put_objects_on_state(type)
+    { state, key }
   end
 
   ######################### Private functions #################################
@@ -153,8 +118,11 @@ defmodule State.State do
     { state, Map.delete(objects, key) }
   end
 
+  #TODO: This creates non-existent keys.  Should raise Keyerror
   def update_object({ objects, state }, key, value) do
-    { state, Map.update!(objects, key, fn (_x) -> value end) }
+    IO.puts("Updating Object")
+    result = Map.update!(objects, key, fn (_x) -> value end)
+    { state, result }
   end
 
   def create_object({ objects, state }, key, value) do
@@ -170,13 +138,12 @@ defmodule State.State do
     #IO.puts("Passing get by ids")
     { state, data, includes }
   end
-
   def get_by_ids({state, data, keys, includes}) do
-    #IO.puts("Getting by ID's")
-    result = Map.take(data, keys)
-    { state, result, includes }
+    IO.puts("Getting by ID's")
+    { state, Map.take(data, keys), includes }
   end
-
+'''
+Temporarily disabled because gql doesn't need
   def get_relationships({ state, data, [] }) do
     { state, data }
   end
@@ -212,5 +179,5 @@ defmodule State.State do
   def get_relationship_data(_state, _type, related_ids, false) do
     related_ids
   end
-
+'''
 end

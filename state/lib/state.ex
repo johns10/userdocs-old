@@ -2,11 +2,13 @@ defmodule State do
 
   alias State.Server
 
-  defdelegate get(type, keys, includes), to: State.Server
+  defdelegate get(type, keys, includes \\ []), to: State.Server
 
   defdelegate create(type, key, value), to: State.Server
 
   defdelegate update(type, key, value), to: State.Server
+
+  defdelegate delete(type, key), to: State.Server
 '''
   def new() do
     { :ok, pid } = Server.start_link()
