@@ -5,14 +5,22 @@ defmodule LiveViewWeb.PagesView do
 
   def render(assigns) do
     ~L"""
-    <div class="">
-      <div>
-        <p>
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Demo</title>
+        <link rel="stylesheet" href="node_modules/uikit/dist/css/uikit.min.css">
+      </head>
+      <body>
+        <ul uk-accordion>
           <%= for page <- Helpers.get(:page, []) do %>
             <%= LiveViewWeb.PageView.render(page, assigns) %>
           <% end %>
-        </p>
-      </div>
+        </ul>
+      </body>
+    </html>
+    <div class="">
     </div>
     """
   end

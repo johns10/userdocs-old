@@ -26,12 +26,14 @@ defmodule State.State do
       default: %{
         type: :page,
         url: "www.google.com",
-        procedure: :default_procedure
+        procedure: :default_procedure,
+        annotations: [ :default1, :default2 ]
         },
       default2: %{
         type: :page,
         url: "www.msn.com",
-        procedure: :default_procedure
+        procedure: :default_procedure_2,
+        annotations: [ :default1, :default2 ]
       }
     },
     procedure: %{
@@ -64,6 +66,33 @@ defmodule State.State do
             ~s|/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']|
         ],
         step_type: :wait
+      }
+    },
+    annotation_type: %{
+      outline: %{
+        script: ~s|element.style.outline = '#{color} solid #{thickness}px'|,
+        params: [ 'color', 'thickness'],
+      },
+
+      outline: %{
+        script: ~s|var size = #{size}; var label = #{label}; var color = '#{color}'; var wrapper = document.createElement('div'); var badge = document.createElement('span'); var textnode = document.createTextNode(label); element.appendChild(wrapper); badge.appendChild(textnode); wrapper.appendChild(badge); element.style.position = 'relative'; wrapper.style.display = ''; wrapper.style.justifyContent = 'center'; wrapper.style.alignItems = 'center'; wrapper.style.minHeight = ''; wrapper.style.position = 'absolute'; wrapper.style.top = (-1 * size).toString(10) + 'px'; wrapper.style.right = (-1 * size).toString(10) + 'px'; badge.style.display = 'inline-block'; badge.style.minWidth = '16px'; badge.style.padding = (0.5 * size).toString(10) + 'px ' + (0.5 * size).toString(10) + 'px'; badge.style.borderRadius = '50%'; badge.style.fontSize = '25px'; badge.style.textAlign = 'center'; badge.style.background = color; badge.style.color = 'white';|,
+        params: [ 'size', 'radius', 'label' ]
+      }
+    },
+    annotations: %{
+      default1: %{
+        types: [ :outline, :badge ],
+        strategy: :xpath,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
+        label: "1",
+        description: "This is the description"
+      },
+      default2: %{
+        types: [ :outline, :badge ],
+        strategy: :xpath,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
+        label: "2",
+        description: "This is the description2"
       }
     }
   )

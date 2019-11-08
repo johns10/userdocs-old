@@ -1,18 +1,16 @@
 defmodule LiveViewWeb.ProcedureView do
   use Phoenix.LiveView
+  alias LiveViewWeb.Helpers
 
-  def render(procedure, assigns) do
+  def render({ key, procedure }, assigns) do
     ~L"""
-    <div class="">
-      <div>
-        <p>
-          Name: <%= procedure %>
-        </p>
-        <p>
-          <%= procedure %>
-        </p>
-      </div>
-    </div>
+    <p>
+      Name: <%= procedure.name %>
+    </p>
+    <%= LiveViewWeb.StepsView.render(
+      Helpers.get(:step, procedure.steps), assigns
+      )
+    %>
     """
   end
 

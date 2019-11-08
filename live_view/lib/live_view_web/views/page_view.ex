@@ -5,17 +5,23 @@ defmodule LiveViewWeb.PageView do
 
   def render({ key, page }, assigns) do
     ~L"""
-    <div class="">
-      <div>
-        <p>
-          URL: <%= page.url %> </br>
-          Procedure: <%= page.procedure %>
-        </p>
-        <p>
-          <%= LiveViewWeb.ProcedureView.render(Helpers.get(:procedure, [ page.procedure ]), assigns) %>
-        </p>
+    <li>
+      <a class="uk-accordion-title" href="#"><%= page.url %></a>
+      <div class="uk-accordion-content">
+        <%=
+          LiveViewWeb.ProcedureView.render(
+            Enum.at(Helpers.get(:procedure, [ page.procedure ]), 0),
+            assigns)
+        %>
       </div>
-    </div>
+      <div class="uk-accordion-content">
+        <%=
+          LiveViewWeb.AnnotationsView.render(
+            Enum.at(Helpers.get(:annotation, [ page.annotations ]), 0),
+            assigns)
+        %>
+      </div>
+    </li>
     """
   end
 
