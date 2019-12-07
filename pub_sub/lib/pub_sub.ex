@@ -1,3 +1,0 @@
-defmodule PubSub do
-
-end
