@@ -54,7 +54,7 @@ defmodule LiveViewWeb.Annotation do
           <%= hidden_input f, :type, value: :annotation %>
           <div class="uk-width-1-3@s">
             <div class="uk-margin uk-form-controls">
-              <%= text_input f, :label, placeholder: "Label" %>
+              <%= text_input f, :label, placeholder: "Label", value: "Label" %>
             </div>
           </div>
           <div class="uk-width-1-3@s">

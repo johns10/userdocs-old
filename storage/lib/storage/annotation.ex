@@ -15,11 +15,10 @@ defmodule Storage.Annotation do
   end
 
   def changeset(annotation, params \\ %{}) do
-    IO.puts("applying Changeset")
+    #IO.puts("applying Changeset")
     #IO.inspect(params)
     annotation
     |> cast(params, [:strategy, :selector, :label, :description, :type])
-    |> IO.inspect()
     #|> cast_assoc(:annotation_type, required: false)
     |> cast_assoc(:page, required: false)
     |> validate_required([:strategy, :selector, :type, :page, :annotation_type])
@@ -64,7 +63,6 @@ defmodule Storage.AnnotationForm do
 
 
   def changeset_has_assoc?(changeset, type) do
-    IO.inspect(changeset.params[Atom.to_string(type)])
     case changeset.params[Atom.to_string(type)] do
       { :error } ->
         { :ok, errors } = Map.fetch(changeset, :errors)

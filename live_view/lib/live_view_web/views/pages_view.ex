@@ -87,7 +87,6 @@ defmodule LiveViewWeb.PagesView do
 
   def mount(_session, socket) do
     :pg2.join(:live_state, self())
-    IO.inspect(:pg2.get_members(:live_state))
 
     # UI Data
     socket = assign(socket, new_annotation: false)
@@ -131,7 +130,7 @@ defmodule LiveViewWeb.PagesView do
   end
 
   def handle_info({ data }, socket) do
-    IO.puts("Handling info")
+    #IO.puts("Handling info")
     Helpers.handle_subscription({ data, socket })
   end
 
@@ -150,7 +149,7 @@ defmodule LiveViewWeb.PagesView do
   end
 
   def handle_event("validate_annotation", %{"annotation_form" => annotation}, socket) do
-    IO.puts("Validating")
+    #IO.puts("Validating")
     pages = socket.assigns.page
     annotation_types = socket.assigns.annotation_type
 
@@ -159,13 +158,12 @@ defmodule LiveViewWeb.PagesView do
       |> AnnotationForm.changeset(
         annotation, %{ pages: pages, annotation_types: annotation_types })
       |> Map.put(:action, :insert)
-      |> IO.inspect()
 
     { :noreply, socket }
   end
 
   def handle_event("save_annotation", %{"annotation_form" => annotation}, socket) do
-    IO.puts("Handling save annotation event")
+    #IO.puts("Handling save annotation event")
     annotation = Helpers.assign_parent_type(annotation)
     %AnnotationForm{}
     |> AnnotationForm.changeset(

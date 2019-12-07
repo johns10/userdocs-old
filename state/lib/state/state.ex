@@ -196,8 +196,7 @@ defmodule State.State do
   ######################### Private functions #################################
 
   def live_broadcast({ state, data }, type) do
-    IO.puts("Broadcasting")
-    IO.inspect(data)
+    #IO.puts("Broadcasting")
     Phoenix.PubSub.broadcast(:live_state, Atom.to_string(type), { data })
     { state, data }
   end

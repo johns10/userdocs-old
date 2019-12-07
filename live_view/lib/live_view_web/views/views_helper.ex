@@ -35,9 +35,8 @@ defmodule LiveViewWeb.Helpers do
   end
 
   def create({ :ok, changeset_result }, type) do
-    IO.puts("Views.Helpers.create function #{type}")
+    #IO.puts("Views.Helpers.create function #{type}")
     value = Map.from_struct(changeset_result)
-    IO.inspect(value)
     State.create(type, String.to_atom(value.id), value)
   end
 
@@ -84,12 +83,11 @@ defmodule LiveViewWeb.Helpers do
   end
 
   def handle_subscription({ data, socket }) do
-    IO.puts("Handling Subscription")
+    #IO.puts("Handling Subscription")
     { data, socket }
     |> extract_object
     |> inject_object
     |> add_object
-    |> IO.inspect()
 
   end
 
