@@ -1,9 +1,9 @@
-defmodule State.MixProject do
+defmodule PubSub.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :state,
+      app: :pub_sub,
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
@@ -14,9 +14,8 @@ defmodule State.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: { State.Application, [] },
-      mod: { PubSub.Application, [] },
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {PubSub.Application, []}
     ]
   end
 

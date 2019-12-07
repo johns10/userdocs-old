@@ -25,6 +25,16 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
+
+config :storage, ecto_repos: [Storage.Repo]
+
+config :storage, Storage.Repo,
+  database: "storage_repo",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  port: "5433"

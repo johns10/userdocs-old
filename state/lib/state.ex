@@ -1,8 +1,8 @@
 defmodule State do
 
-  alias State.Server
+  defdelegate get(type, keys), to: State.Server
 
-  defdelegate get(type, keys, includes \\ []), to: State.Server
+  defdelegate get_all_related_data(from_type, from_ids, to_type), to: State.Server
 
   defdelegate create(type, key, value), to: State.Server
 

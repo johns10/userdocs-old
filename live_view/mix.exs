@@ -40,8 +40,10 @@ defmodule LiveView.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
-      {:floki, ">= 0.0.0", only: :test},
-      {:state, path: "../state"}
+      #{:floki, ">= 0.0.0", only: :test},
+      {:state, path: "../state"},
+      {:storage, path: "../storage"},
+      {:uuid, "~> 1.1"}
     ]
   end
 end

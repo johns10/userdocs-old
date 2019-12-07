@@ -1,9 +1,9 @@
-defmodule State.MixProject do
+defmodule Storage.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :state,
+      app: :storage,
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
@@ -14,16 +14,17 @@ defmodule State.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: { State.Application, [] },
-      mod: { PubSub.Application, [] },
-      extra_applications: [:logger]
+      extra_applications: [:logger, :phoenix_ecto],
+      mod: {Storage.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:phoenix_pubsub, "~> 1.0"}
+      {:ecto_sql, "~> 3.0"},
+      {:postgrex, ">= 0.0.0"},
+      {:phoenix_ecto, "~> 4.0"}
     ]
   end
 end
