@@ -5,7 +5,7 @@ defmodule WebDriver.Procedure do
   def execute_procedure(procedure) do
     execute_procedure( :ok, procedure )
   end
-  def execute_procedure( :ok, [ step | procedure] ) do
+  def execute_procedure( :ok, [ step | procedure ] ) do
     IO.puts("executing procedure")
     Map.pop(step, :type)
     |> execute_procedure_step()

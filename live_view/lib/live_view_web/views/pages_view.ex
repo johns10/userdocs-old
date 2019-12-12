@@ -18,66 +18,72 @@ defmodule LiveViewWeb.PagesView do
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.3/dist/css/uikit.min.css" />
       </head>
       <body>
-        <%= for { id, page } <- @page do %>
-          <%= if page.active == false do %>
-            <div>
-              <a
-                href="#"
-                phx-click="active_element"
-                phx-value-id="<%= id %>"
-                phx-value-type="<%= page.type %>"
-                >
-                <h3>
-                  <%= page.url %>
-                </h3>
-              </a>
-            </div>
-          <% else %>
-            <div>
-              <a
-                href="#"
-                phx-click="active_element"
-                phx-value-id="<%= id %>"
-                phx-value-type="<%= page.type %>"
-                >
-                <h3>
-                  <%= page.url %>
-                </h3>
-              </a>
+        <%= for { id, project } <- @project do %>
+          <%= project.title %>
+          <%= for step <- Helpers.children(:project, id, :step, @step) do %>
+            <%= LiveViewWeb.StepView.render(step, assigns) %>
+          <% end %>
+          <%= for { id, page } <- Helpers.children(:project, id, :page, @page) do %>
+            <%= if page.active == false do %>
               <div>
-                <ul>
-                  <%= for step <- Helpers.children(:page, id, :step, @step) do %>
-                    <%= LiveViewWeb.StepView.render(step, assigns) %>
+                <a
+                  href="#"
+                  phx-click="active_element"
+                  phx-value-id="<%= id %>"
+                  phx-value-type="<%= page.type %>"
+                  >
+                  <h3>
+                    <%= page.url %>
+                  </h3>
+                </a>
+              </div>
+            <% else %>
+              <div>
+                <a
+                  href="#"
+                  phx-click="active_element"
+                  phx-value-id="<%= id %>"
+                  phx-value-type="<%= page.type %>"
+                  >
+                  <h3>
+                    <%= page.url %>
+                  </h3>
+                </a>
+                <div>
+                  <ul>
+                    <%= for step <- Helpers.children(:page, id, :step, @step) do %>
+                      <%= LiveViewWeb.StepView.render(step, assigns) %>
+                    <% end %>
+                  </ul>
+                </div>
+                <hr class="uk-divider-icon">
+                <div>
+                  <ul>
+                    <%= for annotation <- Helpers.children(:page, id, :annotation, @annotation) do %>
+                      <%= LiveViewWeb.Annotation.render(:view, annotation, assigns) %>
+                    <% end %>
+                  </ul>
+                </div>
+                <div>
+                  <%= if @new_annotation == false do %>
+                    <button
+                      class="uk-button uk-button-primary uk-width-1-1"
+                      uk-icon="plus"
+                      phx-click="hello"
+                      >
+                    </button>
+                  <% else %>
+                    <%= LiveViewWeb.Annotation.render(
+                      :form,
+                      page.type,
+                      id,
+                      { "test", %Storage.AnnotationForm{ } },
+                      assigns
+                    ) %>
                   <% end %>
-                </ul>
+                </div>
               </div>
-              <hr class="uk-divider-icon">
-              <div>
-                <ul>
-                  <%= for annotation <- Helpers.children(:page, id, :annotation, @annotation) do %>
-                    <%= LiveViewWeb.Annotation.render(:view, annotation, assigns) %>
-                  <% end %>
-                </ul>
-              </div>
-              <div>
-                <%= if @new_annotation == false do %>
-                  <button
-                    class="uk-button uk-button-primary uk-width-1-1"
-                    uk-icon="plus"
-                    phx-click="hello"
-                    >
-                  </button>
-                <% else %>
-                  <%= LiveViewWeb.Annotation.render(
-                    :form,
-                    page.type,
-                    id,
-                    { "test", %Storage.AnnotationForm{ } },
-                    assigns
-                  ) %>
-                <% end %>
-              </div>
-            </div>
+            <% end %>
           <% end %>
         <% end %>
       </body>
@@ -92,7 +98,14 @@ defmodule LiveViewWeb.PagesView do
     socket = assign(socket, new_annotation: false)
 
     # Application Data
-    socket = Helpers.get(socket, :page, [])
+    socket = assign(socket, project: %{})
+    socket = assign(socket, page: %{})
+    socket = assign(socket, step: %{})
+    socket = assign(socket, annotation: %{})
+    socket = Helpers.get(socket, :project, [:funnel_cloud])
+    socket = Helpers.get_all_related_data(socket, :project, Map.keys(socket.assigns.project), :page)
+    socket = Helpers.get_all_related_data(socket, :project, Map.keys(socket.assigns.project), :step)
+    #socket = Helpers.get(socket, :page, [])
     socket = Helpers.get(socket, :annotation_type, [])
     socket = Helpers.get_all_related_data(socket, :page, Map.keys(socket.assigns.page), :step)
     socket = Helpers.get_all_related_data(socket, :page, Map.keys(socket.assigns.page), :annotation)
@@ -130,7 +143,6 @@ defmodule LiveViewWeb.PagesView do
   end
 
   def handle_info({ data }, socket) do
-    #IO.puts("Handling info")
     Helpers.handle_subscription({ data, socket })
   end
 

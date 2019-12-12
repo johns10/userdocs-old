@@ -1,6 +1,39 @@
 defmodule State.State do
 
   defstruct(
+    project: %{
+      funnel_cloud: %{
+        title: "FunnelCloud Staging",
+        base_url: "https://staging.app.funnelcloud.io",
+        type: :web
+      }
+    },
+    page: %{
+      default: %{
+        type: :page,
+        url: "www.google.com",
+        procedure: :default_procedure,
+        project: :default
+        },
+      default2: %{
+        type: :page,
+        url: "www.msn.com",
+        procedure: :default_procedure_2,
+        project: :default
+      },
+      at_a_glance: %{
+        type: :page,
+        url: "https://staging.app.funnelcloud.io/#/plant/All/overview/at-a-glance",
+        procedure: :funnel_cloud_login_procedure,
+        project: :funnel_cloud
+      },
+      machine: %{
+        type: :page,
+        url: "https://staging.app.funnelcloud.io/#/machines/1",
+        procedure: :funnel_cloud_login_procedure,
+        project: :funnel_cloud
+      }
+    },
     step_type: %{
       navigate: %{
         type: :step_type,
@@ -23,18 +56,6 @@ defmodule State.State do
         args: [:procedure, :types, :text]
       }
     },
-    page: %{
-      default: %{
-        type: :page,
-        url: "www.google.com",
-        procedure: :default_procedure
-        },
-      default2: %{
-        type: :page,
-        url: "www.msn.com",
-        procedure: :default_procedure_2
-      }
-    },
     procedure: %{
       default_procedure: %{
         type: :procedure,
@@ -43,16 +64,20 @@ defmodule State.State do
       default_procedure_2: %{
         type: :procedure,
         name: "Procedure Name 2"
+      },
+      funnel_cloud_login_procedure: %{
+        type: :procedure,
+        name: "FunnelCloud Login Procedure"
       }
     },
     step: %{
       one: %{
         type: :step,
-        strategy: :xpath,
         args: %{
           url: "www.google.com",
         },
         step_type: :navigate,
+        strategy:     :text,
         page: :default
       },
       two: %{
@@ -90,7 +115,169 @@ defmodule State.State do
         },
         step_type: :wait,
         page: :default3
-      }
+      },
+      six: %{
+        order: 1,
+        type: :step,
+        strategy: :text,
+        args: %{
+          url: "https://staging.app.funnelcloud.io/#/setup",
+        },
+        step_type: :navigate,
+        project: :funnel_cloud
+      },
+      seven: %{
+        order: 2,
+        type:         :step,
+        step_type:    :wait,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[1]|
+        },
+        project: :funnel_cloud
+      },
+      eight: %{
+        order: 3,
+        type:         :step,
+        step_type:    :click,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Next')]|
+        },
+        project: :funnel_cloud
+      },
+      nine: %{
+        order: 4,
+        type:         :step,
+        step_type:    :wait,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//div[@class='modal-container']/div/div[@class='content']/div/div[1]/div[3]|
+        },
+        project: :funnel_cloud
+      },
+      ten: %{
+        order: 5,
+        type:         :step,
+        step_type:    :click,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//div[@class='modal-container']/div/div[@class='content']/div/div[1]/div[3]|
+        },
+        project: :funnel_cloud
+      },
+      eleven: %{
+        order: 6,
+        type:         :step,
+        step_type:    :wait,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Next Page')]|
+        },
+        project: :funnel_cloud
+      },
+      twelve: %{
+        order: 7,
+        type:         :step,
+        step_type:    :click,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Next Page')]|
+        },
+        project: :funnel_cloud
+      },
+      thirteen: %{
+        order: 8,
+        type:         :step,
+        step_type:    :wait,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Save')]|
+        },
+        project: :funnel_cloud
+      },
+      fourteen: %{
+        order: 9,
+        type:         :step,
+        step_type:    :click,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Save')]|
+        },
+        project: :funnel_cloud
+      },
+      fifteen: %{
+        order: 10,
+        type:         :step,
+        strategy:     :text,
+        step_type:    :navigate,
+        args: %{
+          url:        "https://staging.app.funnelcloud.io/#/login"
+        },
+        project: :funnel_cloud
+      },
+      sixteen: %{
+        order: 11,
+        type:         :step,
+        step_type:    :wait,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//input[@placeholder='Username']|
+        },
+        project: :funnel_cloud
+      },
+      seventeen: %{
+        order: 12,
+        type:         :step,
+        step_type:    :fill_field,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//input[@placeholder='Username']|,
+          text:       "admin@funnelcloud.io"
+        },
+        project: :funnel_cloud
+      },
+      eighteen: %{
+        order: 13,
+        type:         :step,
+        step_type:    :fill_field,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//input[@placeholder='Password']|,
+          text:       "FirstTimer"
+        },
+        project: :funnel_cloud
+      },
+      nineteen: %{
+        order: 14,
+        type:         :step,
+        step_type:    :click,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]//form//button|
+        },
+        project: :funnel_cloud
+      },
+      twenty: %{
+        order: 1,
+        type:         :step,
+        step_type:    :navigate,
+        strategy:     :text,
+        args: %{
+          url:   "https://staging.app.funnelcloud.io/#/plant/All/overview/at-a-glance"
+        },
+        page: :at_a_glance
+      },
+      twenty_one: %{
+        order: 2,
+        type:         :step,
+        step_type:    :wait,
+        strategy:     :xpath,
+        args: %{
+          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//table/tbody|
+        },
+        page: :at_a_glance
+      },
     },
     annotation_type: %{
       outline: %{
@@ -123,6 +310,46 @@ defmodule State.State do
         description: "This is the description2",
         type: :annotation,
         page: :default
+      },
+      production_line_outline: %{
+        title: "Production Line",
+        annotation_type: :outline,
+        strategy: :xpath,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
+        label: "1",
+        description: "This is the production line.",
+        type: :annotation,
+        page: :at_a_glance
+      },
+      production_line_badge: %{
+        title: "Production Line",
+        annotation_type: :badge,
+        strategy: :xpath,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
+        label: "1",
+        description: "This is the production line.",
+        type: :annotation,
+        page: :at_a_glance
+      },
+      current_process_outline: %{
+        title: "Current Process",
+        annotation_type: :outline,
+        strategy: :xpath,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
+        label: "1",
+        description: "This is the production line.",
+        type: :annotation,
+        page: :at_a_glance
+      },
+      current_process_badge: %{
+        title: "Current Process",
+        annotation_type: :badge,
+        strategy: :xpath,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
+        label: "1",
+        description: "This is the production line.",
+        type: :annotation,
+        page: :at_a_glance
       }
     }
   )
@@ -184,7 +411,6 @@ defmodule State.State do
           [ id | ids ]
         rescue
           MatchError -> ids
-          ids
         end
       end
     )
@@ -242,7 +468,7 @@ defmodule State.State do
 
   def get_reverse_relationship(state, { id_from, object_from }, related_type) do
     #IO.inspect("Getting reverse relationship from #{object_from.type}: #{id_from} to #{related_type}")
-    { state, related } = get(state, related_type)
+    { _state, related } = get(state, related_type)
     Enum.reduce(
       related,
       %{},
@@ -250,10 +476,9 @@ defmodule State.State do
         #IO.inspect("Processing related object #{object.type}: #{id} to #{object[object_from.type]}")
         try do
           ^id_from = object[object_from.type]
-          objects = Map.put(objects, id, object)
+          Map.put(objects, id, object)
         rescue
-          MatchError -> "relationship not available"
-          objects
+          MatchError -> objects
         end
       end
     )
@@ -272,7 +497,6 @@ defmodule State.State do
           Map.put(updated_object, related_type, [ id | updated_object[related_type] ])
         rescue
           MatchError -> updated_object
-          updated_object
         end
       end
     )

@@ -1,8 +1,9 @@
 defmodule LiveViewWeb.Helpers do
   use Phoenix.LiveView
 
+  #TODO: this breaks with one child.  Fix it
   def children(parent_type, parent_id, child_type, child_objects) do
-    #IO.puts("Getting children of type #{parent_type} on #{child_type}")
+    #IO.puts("Getting #{child_type} children of #{parent_type}")
     Enum.reduce(
       child_objects,
       %{},
@@ -27,11 +28,17 @@ defmodule LiveViewWeb.Helpers do
 
   def get_all_related_data(socket, from_type, from_ids, to_type) do
     #IO.puts("Getting related data from #{from_type} to #{to_type}")
-    State.get_all_related_data(from_type, from_ids, to_type)
     assign(
       socket,
-      Map.put(socket.assigns, to_type, State.get_all_related_data(from_type, from_ids, to_type))
+      Map.put(
+        socket.assigns,
+        to_type,
+        Map.merge(
+          socket.assigns[to_type],
+          State.get_all_related_data(from_type, from_ids, to_type)
+        )
       )
+    )
   end
 
   def create({ :ok, changeset_result }, type) do
