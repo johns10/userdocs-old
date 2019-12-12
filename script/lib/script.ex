@@ -1,6 +1,5 @@
 defmodule Script do
 
-  def hello do
-    :world
-  end
+  defdelegate generate_script(script, list, types), to: Script.Script
+
 end

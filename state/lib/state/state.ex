@@ -281,13 +281,19 @@ defmodule State.State do
     },
     annotation_type: %{
       outline: %{
-        script: ~s|element.style.outline = '{color} solid {thickness}px'|,
-        params: [ 'color', 'thickness'],
+        prototype: ~s|element.style.outline = '{color} solid {thickness}px'|,
+        args: [ 'color', 'thickness'],
       },
 
       badge: %{
-        script: ~s|var size = {size}; var label = {label}; var color = '{color}'; var wrapper = document.createElement('div'); var badge = document.createElement('span'); var textnode = document.createTextNode(label); element.appendChild(wrapper); badge.appendChild(textnode); wrapper.appendChild(badge); element.style.position = 'relative'; wrapper.style.display = ''; wrapper.style.justifyContent = 'center'; wrapper.style.alignItems = 'center'; wrapper.style.minHeight = ''; wrapper.style.position = 'absolute'; wrapper.style.top = (-1 * size).toString(10) + 'px'; wrapper.style.right = (-1 * size).toString(10) + 'px'; badge.style.display = 'inline-block'; badge.style.minWidth = '16px'; badge.style.padding = (0.5 * size).toString(10) + 'px ' + (0.5 * size).toString(10) + 'px'; badge.style.borderRadius = '50%'; badge.style.fontSize = '25px'; badge.style.textAlign = 'center'; badge.style.background = color; badge.style.color = 'white';|,
-        params: [ 'size', 'radius', 'label' ]
+        prototype: ~s|var size = {size}; var label = {label}; var color = '{color}'; var wrapper = document.createElement('div'); var badge = document.createElement('span'); var textnode = document.createTextNode(label); element.appendChild(wrapper); badge.appendChild(textnode); wrapper.appendChild(badge); element.style.position = 'relative'; wrapper.style.display = ''; wrapper.style.justifyContent = 'center'; wrapper.style.alignItems = 'center'; wrapper.style.minHeight = ''; wrapper.style.position = 'absolute'; wrapper.style.top = (-1 * size).toString(10) + 'px'; wrapper.style.right = (-1 * size).toString(10) + 'px'; badge.style.display = 'inline-block'; badge.style.minWidth = '16px'; badge.style.padding = (0.5 * size).toString(10) + 'px ' + (0.5 * size).toString(10) + 'px'; badge.style.borderRadius = '50%'; badge.style.fontSize = '25px'; badge.style.textAlign = 'center'; badge.style.background = color; badge.style.color = 'white';|,
+        args: [ 'size', 'radius', 'label' ]
+      }
+    },
+    selector_type: %{
+      xpath: %{
+        prototype: ~s|var element = document.evaluate('{selector}', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;|,
+        args: [ 'selector' ]
       }
     },
     annotation: %{
@@ -319,7 +325,11 @@ defmodule State.State do
         label: "1",
         description: "This is the production line.",
         type: :annotation,
-        page: :at_a_glance
+        page: :at_a_glance,
+        args: %{
+          color: 'red',
+          thickness: 2
+        }
       },
       production_line_badge: %{
         title: "Production Line",
@@ -329,7 +339,12 @@ defmodule State.State do
         label: "1",
         description: "This is the production line.",
         type: :annotation,
-        page: :at_a_glance
+        page: :at_a_glance,
+        args: %{
+          radius: 15,
+          label: 1,
+          color: 'red'
+        }
       },
       current_process_outline: %{
         title: "Current Process",
@@ -339,7 +354,11 @@ defmodule State.State do
         label: "1",
         description: "This is the production line.",
         type: :annotation,
-        page: :at_a_glance
+        page: :at_a_glance,
+        args: %{
+          color: 'red',
+          thickness: 2
+        }
       },
       current_process_badge: %{
         title: "Current Process",
@@ -349,7 +368,12 @@ defmodule State.State do
         label: "1",
         description: "This is the production line.",
         type: :annotation,
-        page: :at_a_glance
+        page: :at_a_glance,
+        args: %{
+          radius: 15,
+          label: 1,
+          color: 'red'
+        }
       }
     }
   )

@@ -31,11 +31,13 @@ defmodule TaskRunner.Annotate do
     #|> IO.inspect()
 
     State.get_all_related_data(:page, [page_id], :annotation)
-    #|> IO.inspect()
-
-    State.get(:annotation_type, [])
     |> IO.inspect()
 
+    types = Map.merge(
+      State.get(:annotation_type, []),
+      State.get(:selector_type, [])
+    )
+    |> IO.inspect()
     #IO.puts("Here's the steps")
     #IO.inspect(Map.keys(steps))
     #IO.inspect(steps)
