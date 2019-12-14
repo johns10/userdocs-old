@@ -7,4 +7,8 @@ defmodule WebDriver do
     WebDriver.Page.process_pages(pages)
   end
 
+  defdelegate execute_procedure(procedure), to: WebDriver.Procedure
+
+  defdelegate navigate(url), to: WebDriver.Server
+
 end

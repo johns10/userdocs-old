@@ -1,5 +1,7 @@
 defmodule Script do
 
-  defdelegate generate_script(script, list, types), to: Script.Script
+  def generate_script(list, script, types) do
+    Script.Script.generate_script(script, list, types)
+  end
 
 end

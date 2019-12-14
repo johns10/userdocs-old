@@ -7,7 +7,8 @@ defmodule WebDriver.Procedure do
   end
   def execute_procedure( :ok, [ step | procedure ] ) do
     IO.puts("executing procedure")
-    Map.pop(step, :type)
+    IO.inspect(step)
+    step
     |> execute_procedure_step()
     |> execute_procedure(procedure)
   end

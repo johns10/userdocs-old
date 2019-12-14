@@ -20,7 +20,8 @@ defmodule TaskRunner.MixProject do
   defp deps do
     [
       {:state, path: "../state"},
-      {:script, path: "../script"}
+      {:script, path: "../script"},
+      {:web_driver, path: "../web_driver"}
     ]
   end
 end
