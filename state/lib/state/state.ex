@@ -259,36 +259,85 @@ defmodule State.State do
         project: :funnel_cloud
       },
       twenty: %{
-        order: 1,
+        page:         :at_a_glance,
+        order:        1,
         type:         :step,
         step_type:    :navigate,
-        strategy:     :text,
         args: %{
-          url:   "https://staging.app.funnelcloud.io/#/plant/All/overview/at-a-glance"
-        },
-        page: :at_a_glance
+          url:   "https://varvy.com/pagespeed/wicked-fast.html"
+        }
       },
       twenty_one: %{
-        order: 2,
+        page:         :at_a_glance,
+        order:        2,
         type:         :step,
         step_type:    :wait,
-        strategy:     :xpath,
         args: %{
-          strategy: :xpath,
-          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//table/tbody|
+          strategy:   :xpath,
+          selector:   ~s|//div[@id='menu']/ul//a[@href='/']|
         },
-        page: :at_a_glance
       },
+      twenty_two: %{
+        page:         :at_a_glance,
+        order:        3,
+        type:         :step,
+        step_type:    :javascript,
+        args: %{
+          script_type: :badge,
+          strategy: :xpath,
+          selector: ~s|//div[@id='menu']/ul//a[@href='/']|,
+          size: 15,
+          label: "1",
+          color: 'red'
+        }
+      }
     },
-    annotation_type: %{
+    script: %{
       outline: %{
-        prototype: ~s|element.style.outline = '<%= color %> solid <%= thickness %>px';|,
-        args: [ 'color', 'thickness'],
+        prototype: """
+        function outline(selector, color, thickness) {
+          var element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          element.style.outline = color.concat(' solid ', thickness, 'px';
+        }
+        outline(arguments[0], arguments[1], arguments[2])
+        """,
+        args: [ :selector, :color, :thickness],
       },
 
       badge: %{
-        prototype: ~s|var size = <%= size %>; var label = <%= label %>; var color = '<%= color %>'; var wrapper = document.createElement('div'); var badge = document.createElement('span'); var textnode = document.createTextNode(label); element.appendChild(wrapper); badge.appendChild(textnode); wrapper.appendChild(badge); element.style.position = 'relative'; wrapper.style.display = ''; wrapper.style.justifyContent = 'center'; wrapper.style.alignItems = 'center'; wrapper.style.minHeight = ''; wrapper.style.position = 'absolute'; wrapper.style.top = (-1 * size).toString(10) + 'px'; wrapper.style.right = (-1 * size).toString(10) + 'px'; badge.style.display = 'inline-block'; badge.style.minWidth = '16px'; badge.style.padding = (0.5 * size).toString(10) + 'px ' + (0.5 * size).toString(10) + 'px'; badge.style.borderRadius = '50%'; badge.style.fontSize = '25px'; badge.style.textAlign = 'center'; badge.style.background = color; badge.style.color = 'white';|,
-        args: [ 'size', 'radius', 'label' ]
+        prototype: """
+        function badge(selector, size, label, color) {
+          console.log(selector)
+          console.log(size)
+          console.log(label)
+          console.log(color)
+          var element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          var wrapper = document.createElement('div');
+          var badge = document.createElement('span');
+          var textnode = document.createTextNode(label);
+          element.appendChild(wrapper);
+          badge.appendChild(textnode);
+          wrapper.appendChild(badge);
+          element.style.position = 'relative';
+          wrapper.style.display = '';
+          wrapper.style.justifyContent = 'center';
+          wrapper.style.alignItems = 'center';
+          wrapper.style.minHeight = '';
+          wrapper.style.position = 'absolute';
+          wrapper.style.top = (-1 * size).toString(10) + 'px';
+          wrapper.style.right = (-1 * size).toString(10) + 'px';
+          badge.style.display = 'inline-block';
+          badge.style.minWidth = '16px';
+          badge.style.padding = (0.5 * size).toString(10) + 'px ' + (0.5 * size).toString(10) + 'px';
+          badge.style.borderRadius = '50%';
+          badge.style.fontSize = '25px';
+          badge.style.textAlign = 'center';
+          badge.style.background = color;
+          badge.style.color = 'white';
+        }
+        badge(arguments[0], arguments[1], arguments[2], arguments[3])
+        """,
+        args: [ :selector, :size, :label, :color ]
       }
     },
     selector_type: %{
@@ -302,7 +351,7 @@ defmodule State.State do
         title: "Manufacturing Process",
         annotation_type: :outline,
         strategy: :xpath,
-        selector: ~s|/html/body/div[@class="ember-view"]/div[9]/div/div//table/tbody/tr/td[1]|,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
         label: "1",
         description: "This is the description",
         type: :annotation,
@@ -312,7 +361,7 @@ defmodule State.State do
         title: "Actual Cycles",
         annotation_type: :badge,
         strategy: :xpath,
-        selector: ~s|/html/body/div[@class="ember-view"]/div[9]/div/div//table/tbody/tr/td[2]|,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
         label: "2",
         description: "This is the description2",
         type: :annotation,
@@ -322,12 +371,14 @@ defmodule State.State do
         title: "Production Line",
         annotation_type: :outline,
         strategy: :xpath,
-        selector: ~s|/html/body/div[@class="ember-view"]/div[9]/div/div//table/tbody/tr/td[1]|,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
         label: "1",
         description: "This is the production line.",
         type: :annotation,
         page: :at_a_glance,
         args: %{
+          strategy: :xpath,
+          selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
           color: 'red',
           thickness: 2
         }
@@ -336,14 +387,16 @@ defmodule State.State do
         title: "Production Line",
         annotation_type: :badge,
         strategy: :xpath,
-        selector: ~s|/html/body/div[@class="ember-view"]/div[9]/div/div//table/tbody/tr/td[1]|,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
         label: "1",
         description: "This is the production line.",
         type: :annotation,
         page: :at_a_glance,
         args: %{
+          strategy: :xpath,
+          selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
           size: 15,
-          label: 1,
+          label: "1",
           color: 'red'
         }
       },
@@ -351,12 +404,14 @@ defmodule State.State do
         title: "Current Process",
         annotation_type: :outline,
         strategy: :xpath,
-        selector: ~s|/html/body/div[@class="ember-view"]/div[9]/div/div//table/tbody/tr/td[2]|,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
         label: "1",
         description: "This is the production line.",
         type: :annotation,
         page: :at_a_glance,
         args: %{
+          strategy: :xpath,
+          selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
           color: 'red',
           thickness: 2
         }
@@ -365,14 +420,16 @@ defmodule State.State do
         title: "Current Process",
         annotation_type: :badge,
         strategy: :xpath,
-        selector: ~s|/html/body/div[@class="ember-view"]/div[9]/div/div//table/tbody/tr/td[2]|,
+        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
         label: "1",
         description: "This is the production line.",
         type: :annotation,
         page: :at_a_glance,
         args: %{
+          strategy: :xpath,
+          selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
           size: 15,
-          label: 1,
+          label: "1",
           color: 'red'
         }
       }

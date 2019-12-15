@@ -22,26 +22,17 @@ defmodule TaskRunner.Annotate do
   end
 
   def get_page_procedure(page_id) do
-    types = Map.merge(
-      State.get(:annotation_type, []),
-      State.get(:selector_type, [])
-    )
-
-    IO.inspect(self())
+    { :ok, pid } = WebDriver.Server.start_link()
 
     State.get_all_related_data(:page, [page_id], :step)
     |> Enum.into([])
     |> Enum.sort(
       fn({ _, object1 }, { _, object2 }) ->
-        Map.get(object1, :order) < Map.get(object2, :order)
+        Map.get(object1, :order) > Map.get(object2, :order)
       end)
     |> process_steps()
     |> IO.inspect()
-    #|> WebDriver.execute_procedure()
-
-    script_parameters = State.get_all_related_data(:page, [page_id], :annotation)
-    |> process_annotations()
-    |> Script.generate_script('', types)
+    #|> WebDriver.execute_procedure(pid)
   end
 
   def process_steps(steps) do
@@ -55,6 +46,7 @@ defmodule TaskRunner.Annotate do
   end
 
   def process_annotations(annotations) do
+    IO.inspect(annotations)
     annotations
     |> Enum.into([])
     |> Enum.reduce([], &convert_annotation/2)
@@ -62,7 +54,6 @@ defmodule TaskRunner.Annotate do
 
   def convert_annotation({ key, annotation }, script_parameters) do
     [
-      %{ type: annotation.strategy, args: [ selector: annotation.selector ] },
       %{ type: annotation.annotation_type, args: Enum.into(annotation.args, [] ) } |
       script_parameters
     ]

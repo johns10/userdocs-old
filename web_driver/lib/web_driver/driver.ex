@@ -43,6 +43,9 @@ defmodule WebDriver.Driver do
   def h_execute_script(script_function, function_args) do
     execute_script(script_function, function_args)
   end
+  def h_execute_script(script_function) do
+    execute_script(script_function)
+  end
 
   def h_element_displayed?(request = { status, element }) do
     { element_displayed?(element), element }

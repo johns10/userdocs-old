@@ -23,6 +23,7 @@ defmodule WebDriver.MixProject do
     [
       { :hound, "~> 1.0" },
       { :script, path: "../script" },
+      { :state, path: "../state" }
     ]
   end
 end

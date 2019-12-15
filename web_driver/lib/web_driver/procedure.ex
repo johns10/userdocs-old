@@ -31,22 +31,43 @@ defmodule WebDriver.Procedure do
     |> WebDriver.Driver.h_click()
     :ok
   end
-  def execute_procedure_step({ :fill_field, %{ strategy: strategy, selector: selector, text: text} }) do
+  def execute_procedure_step({ :fill_field, %{ strategy: strategy, selector: selector, text: text } }) do
     IO.puts("Executing fill field step")
     WebDriver.Driver.h_find_element(strategy, selector, @default_retries)
     |> WebDriver.Driver.h_fill_field(text)
     :ok
   end
-  def execute_procedure_step({ :javascript, args = %{ procedure: procedure, types: types } }) do
+  def execute_procedure_step({ :javascript, args }) do
     IO.puts("Executing Javascript Step")
-    Script.Script.generate_script('', procedure, types)
-    |> WebDriver.Driver.h_execute_script(args)
+    { script_type, args } = Map.pop(args, :script_type)
+    WebDriver.Driver.h_execute_script(
+      prototype(script_type),
+      ordered_arguments(args, script_type)
+    )
     :ok
   end
-  def execute_procedure_step(:wait_click) do
 
+  def prototype(script_type) do
+    State.get(:script, script_type)
+    |> Map.values()
+    |> Enum.at(0)
+    |> Map.get(:prototype)
   end
 
+  def ordered_arguments(args, script_type) do
+    Enum.reduce(
+      Enum.reverse(script_arguments(script_type)),
+      [],
+      fn(arg, ordered_args) -> [ args[arg] | ordered_args ] end
+      )
+  end
+
+  def script_arguments(script_type) do
+    State.get(:script, script_type)
+    |> Map.values()
+    |> Enum.at(0)
+    |> Map.get(:args)
+  end
 
   def wait_until_available(strategy, selector, timeout) do
     { false, WebDriver.Driver.h_find_element(strategy, selector, 5) }

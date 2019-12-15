@@ -7,7 +7,7 @@ defmodule ProcedureTest do
   alias WebDriver.Driver
 
   hound_session(driver: Driver.setup())
-
+"""
   test "executes a navigate step" do
     Procedure.execute_procedure_step({
       :navigate,
@@ -71,7 +71,7 @@ defmodule ProcedureTest do
       #I don't know what to assert.  I don't get text back.
   end
 
-  test "executes a javascript step" do
+  test "executes an entire procedure" do
     procedure = [
       %{
         :type     => :navigate,
@@ -127,6 +127,26 @@ defmodule ProcedureTest do
     find_element(:xpath, ~s|//div[@id='contact_reply']/h1[.='Thank You for your Message!']|)
     |> visible_text()
     assert(text == "Thank You for your Message!")
+  end
+  """
+
+  test "executes an javascript step" do
+    procedure = [
+      navigate: %{url: "https://varvy.com/pagespeed/wicked-fast.html"},
+      wait: %{
+        selector: "//div[@id='menu']/ul//a[@href='/']",
+        strategy: :xpath
+      },
+      javascript: %{
+        color: 'red',
+        label: "1",
+        script_type: :badge,
+        selector: ~s|//div[@id='menu']/ul//a[@href='/']|,
+        size: 15,
+        strategy: :xpath
+      }
+    ]
+    text = Procedure.execute_procedure(procedure)
   end
 end
 
