@@ -17,7 +17,7 @@ defmodule WebDriver.Driver do
       browserName: "chrome",
       browser: "chrome",
       #chromeOptions: %{
-      #    "args" => ["--no-sandbox"],
+      #    "args" => ["headless"],
       #}
   }
   end
@@ -44,7 +44,7 @@ defmodule WebDriver.Driver do
     execute_script(script_function, function_args)
   end
   def h_execute_script(script_function) do
-    execute_script(script_function)
+    execute_script(script_function, [])
   end
 
   def h_element_displayed?(request = { status, element }) do
@@ -52,5 +52,13 @@ defmodule WebDriver.Driver do
   end
   def h_element_displayed?(element) do
     element_displayed?(element)
+  end
+
+  def h_take_screenshot() do
+    take_screenshot()
+  end
+
+  def h_set_window_size(width, height) do
+    set_window_size(current_window_handle(), width, height)
   end
 end

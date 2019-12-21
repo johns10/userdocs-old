@@ -3,35 +3,46 @@ defmodule State.State do
   defstruct(
     project: %{
       funnel_cloud: %{
-        title: "FunnelCloud Staging",
+        title:    "FunnelCloud Staging",
         base_url: "https://staging.app.funnelcloud.io",
-        type: :web
+        type:     :web
+      },
+      test: %{
+        title:    "Test Project",
+        base_url: "http://webdriveruniversity.com/",
+        type:     :web
       }
     },
     page: %{
       default: %{
-        type: :page,
-        url: "www.google.com",
-        procedure: :default_procedure,
-        project: :default
+        type:       :page,
+        url:        "www.google.com",
+        procedure:  :default_procedure,
+        project:    :default
         },
       default2: %{
-        type: :page,
-        url: "www.msn.com",
-        procedure: :default_procedure_2,
-        project: :default
+        type:       :page,
+        url:        "www.msn.com",
+        procedure:  :default_procedure_2,
+        project:    :default
       },
       at_a_glance: %{
-        type: :page,
-        url: "https://staging.app.funnelcloud.io/#/plant/All/overview/at-a-glance",
-        procedure: :funnel_cloud_login_procedure,
-        project: :funnel_cloud
+        type:       :page,
+        url:        "https://staging.app.funnelcloud.io/#/plant/All/overview/at-a-glance",
+        procedure:  :funnel_cloud_login_procedure,
+        project:    :funnel_cloud
       },
       machine: %{
-        type: :page,
-        url: "https://staging.app.funnelcloud.io/#/machines/1",
-        procedure: :funnel_cloud_login_procedure,
-        project: :funnel_cloud
+        type:       :page,
+        url:        "https://staging.app.funnelcloud.io/#/machines/1",
+        procedure:  :funnel_cloud_login_procedure,
+        project:    :funnel_cloud
+      },
+      test_page: %{
+        type:       :page,
+        url:        "https://varvy.com/pagespeed/wicked-fast.html",
+        procedure:  :funnel_cloud_login_procedure,
+        project:    :test
       }
     },
     step_type: %{
@@ -72,69 +83,74 @@ defmodule State.State do
     },
     step: %{
       one: %{
-        type: :step,
+        type:       :step,
+        order:      1,
         args: %{
-          url: "www.google.com",
+          url:      "www.google.com",
         },
-        step_type: :navigate,
-        strategy:     :text,
-        page: :default
+        step_type:  :navigate,
+        strategy:   :text,
+        page:       :default
       },
       two: %{
-        type: :step,
-        strategy: :xpath,
+        type:       :step,
+        order:      2,
+        strategy:   :xpath,
         args: %{
           selector: ~s|/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']|,
         },
-        step_type: :wait,
-        page: :default
+        step_type:  :wait,
+        page:       :default
       },
       three: %{
-        type: :step,
-        strategy: :xpath,
+        type:       :step,
+        order:      3,
+        strategy:   :xpath,
         args: %{
-          url: "www.google.com",
+          url:      "www.google.com",
         },
-        step_type: :wait,
-        page: :default2
+        step_type:  :wait,
+        page:       :default2
       },
       four: %{
-        type: :step,
-        strategy: :xpath,
+        type:       :step,
+        order:      4,
+        strategy:   :xpath,
         args: %{
           selector: ~s|/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']|,
         },
-        step_type: :wait,
-        page: :default2
+        step_type:  :wait,
+        page:       :default2
       },
       five: %{
-        type: :step,
-        strategy: :xpath,
+        type:       :step,
+        order:      5,
+        strategy:   :xpath,
         args: %{
           selector: ~s|/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']|,
         },
-        step_type: :wait,
-        page: :default3
+        step_type:  :wait,
+        page:       :default3
       },
       six: %{
-        order: 1,
-        type: :step,
-        strategy: :text,
+        order:      1,
+        type:       :step,
+        strategy:   :text,
         args: %{
-          url: "https://staging.app.funnelcloud.io/#/setup",
+          url:      "https://staging.app.funnelcloud.io/#/setup",
         },
-        step_type: :navigate,
-        project: :funnel_cloud
+        step_type:  :navigate,
+        project:    :funnel_cloud
       },
       seven: %{
-        order: 2,
-        type:         :step,
-        step_type:    :wait,
-        strategy:     :xpath,
+        order:      2,
+        type:       :step,
+        step_type:  :wait,
         args: %{
-          selector:   ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[1]|
+          selector:  ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[1]|,
+          strategy:   :xpath
         },
-        project: :funnel_cloud
+        project:    :funnel_cloud
       },
       eight: %{
         order: 3,
@@ -278,32 +294,174 @@ defmodule State.State do
         },
       },
       twenty_two: %{
-        page:         :at_a_glance,
+        annotation:     :production_line,
+        order:          3,
+        type:           :step,
+        step_type:      :javascript,
+        args: %{
+          script_type:  :badge,
+          strategy:     :xpath,
+          selector:     ~s|//div[@id='menu']/ul//a[@href='/']|,
+          size:         15,
+          label:        "1",
+          color:        "red"
+        }
+      },
+      twenty_three: %{
+        annotation:     :production_line,
+        order:          4,
+        type:           :step,
+        step_type:      :javascript,
+        args: %{
+          script_type:  :outline,
+          strategy:     :xpath,
+          selector:     ~s|//div[@id='menu']/ul//a[@href='/']|,
+          thickness:    3,
+          color:        "red"
+        }
+      },
+      twenty_four: %{
+        page:           :at_a_glance,
+        order:          5,
+        type:           :step,
+        step_type:      :page_screenshot,
+        args: %{
+
+        }
+      },
+      twenty_five: %{
+        project:        :test,
+        order:          1,
+        type:           :step,
+        step_type:      :navigate,
+        args: %{
+          url:   "http://webdriveruniversity.com/"
+        }
+      },
+      twenty_six: %{
+        project:      :test,
+        order:        2,
+        type:         :step,
+        step_type:    :wait,
+        args: %{
+          strategy:   :xpath,
+          selector:   ~s|/html//a[@id='to-do-list']//h1[.='TO DO LIST']|
+        }
+      },
+      twenty_seven: %{
+        project:      :test,
         order:        3,
         type:         :step,
-        step_type:    :javascript,
+        step_type:    :navigate,
         args: %{
-          script_type: :badge,
-          strategy: :xpath,
-          selector: ~s|//div[@id='menu']/ul//a[@href='/']|,
-          size: 15,
-          label: "1",
-          color: 'red'
+          url:   "http://webdriveruniversity.com/To-Do-List/index.html"
         }
-      }
+      },
+      twenty_eight: %{
+        project:      :test,
+        order:        4,
+        type:         :step,
+        step_type:    :wait,
+        args: %{
+          strategy:   :xpath,
+          selector:   ~s|//div[@id='container']/ul/li[1]|
+        }
+      },
+      twenty_nine: %{
+        page:         :test_page,
+        order:        1,
+        type:         :step,
+        step_type:    :navigate,
+        args: %{
+          url:   "https://varvy.com/pagespeed/wicked-fast.html"
+        }
+      },
+      thirty: %{
+        page:         :test_page,
+        order:        2,
+        type:         :step,
+        step_type:    :wait,
+        args: %{
+          strategy:   :xpath,
+          selector:   ~s|//div[@id='menu']/ul//a[@href='/']|
+        },
+      },
+      thirty_one: %{
+        annotation:     :test_annotation,
+        order:          3,
+        type:           :step,
+        step_type:      :javascript,
+        args: %{
+          script_type:  :badge,
+          strategy:     :xpath,
+          selector:     ~s|//div[@id='menu']/ul//a[@href='/']|,
+          size:         15,
+          label:        "1",
+          color:        "red"
+        }
+      },
+      thirty_two: %{
+        annotation:     :test_annotation,
+        order:          4,
+        type:           :step,
+        step_type:      :javascript,
+        args: %{
+          script_type:  :outline,
+          strategy:     :xpath,
+          selector:     ~s|//div[@id='menu']/ul//a[@href='/']|,
+          thickness:    3,
+          color:        "red"
+        }
+      },
+      thirty_three: %{
+        annotation:     :test_annotation_2,
+        order:          5,
+        type:           :step,
+        step_type:      :javascript,
+        args: %{
+          script_type:  :badge,
+          strategy:     :xpath,
+          selector:     ~s|//div[@id='menu']/ul//a[@href='/pagespeed/']|,
+          size:         15,
+          label:        "1",
+          color:        "red"
+        }
+      },
+      thirty_four: %{
+        annotation:     :test_annotation_2,
+        order:          6,
+        type:           :step,
+        step_type:      :javascript,
+        args: %{
+          script_type:  :outline,
+          strategy:     :xpath,
+          selector:     ~s|//div[@id='menu']/ul//a[@href='/pagespeed/']|,
+          thickness:    3,
+          color:        "red"
+        }
+      },
+      thirty_five: %{
+        page:           :test_page,
+        order:          7,
+        type:           :step,
+        step_type:      :page_screenshot,
+        args: %{
+
+        }
+      },
+
     },
     script: %{
       outline: %{
         prototype: """
         function outline(selector, color, thickness) {
           var element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          element.style.outline = color.concat(' solid ', thickness, 'px';
+          element.style.outline = color.concat(' solid ', thickness, 'px');
         }
         outline(arguments[0], arguments[1], arguments[2])
         """,
         args: [ :selector, :color, :thickness],
       },
-
       badge: %{
         prototype: """
         function badge(selector, size, label, color) {
@@ -338,6 +496,26 @@ defmodule State.State do
         badge(arguments[0], arguments[1], arguments[2], arguments[3])
         """,
         args: [ :selector, :size, :label, :color ]
+      },
+      page_dimensions: %{
+        prototype: """
+        return {
+          height: Math.max(
+            document.body.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.clientHeight,
+            document.documentElement.scrollHeight,
+            document.documentElement.offsetHeight
+          ),
+          width: Math.max(
+            document.body.scrollWidth,
+            document.body.offsetWidth,
+            document.documentElement.clientWidth,
+            document.documentElement.scrollWidth,
+            document.documentElement.offsetWidth
+          )
+        }
+        """
       }
     },
     selector_type: %{
@@ -346,93 +524,49 @@ defmodule State.State do
         args: [ 'selector' ]
       }
     },
+    annotation_type: %{
+      outline: %{
+
+      },
+      badge: %{
+
+      }
+    },
     annotation: %{
-      default1: %{
-        title: "Manufacturing Process",
-        annotation_type: :outline,
-        strategy: :xpath,
-        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
-        label: "1",
-        description: "This is the description",
+      production_line: %{
         type: :annotation,
-        page: :default
-      },
-      default2: %{
-        title: "Actual Cycles",
-        annotation_type: :badge,
-        strategy: :xpath,
-        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
-        label: "2",
-        description: "This is the description2",
-        type: :annotation,
-        page: :default
-      },
-      production_line_outline: %{
         title: "Production Line",
         annotation_type: :outline,
-        strategy: :xpath,
-        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
         label: "1",
         description: "This is the production line.",
-        type: :annotation,
         page: :at_a_glance,
-        args: %{
-          strategy: :xpath,
-          selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
-          color: 'red',
-          thickness: 2
-        }
-      },
-      production_line_badge: %{
-        title: "Production Line",
-        annotation_type: :badge,
-        strategy: :xpath,
-        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
-        label: "1",
-        description: "This is the production line.",
-        type: :annotation,
-        page: :at_a_glance,
-        args: %{
-          strategy: :xpath,
-          selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[1]|,
-          size: 15,
-          label: "1",
-          color: 'red'
-        }
       },
       current_process_outline: %{
+        type: :annotation,
         title: "Current Process",
         annotation_type: :outline,
-        strategy: :xpath,
-        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
         label: "1",
-        description: "This is the production line.",
-        type: :annotation,
+        description: "This is the current running process.",
         page: :at_a_glance,
-        args: %{
-          strategy: :xpath,
-          selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
-          color: 'red',
-          thickness: 2
-        }
       },
-      current_process_badge: %{
-        title: "Current Process",
-        annotation_type: :badge,
-        strategy: :xpath,
-        selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
-        label: "1",
-        description: "This is the production line.",
+      test_annotation: %{
         type: :annotation,
-        page: :at_a_glance,
-        args: %{
-          strategy: :xpath,
-          selector: ~s|/html/body/div[@class='ember-view']/div[9]/div/div//table/tbody/tr/td[2]|,
-          size: 15,
-          label: "1",
-          color: 'red'
-        }
+        title: "Google Guidelines",
+        annotation_type: :outline,
+        label: "1",
+        description: "This is the google guidelines.",
+        page: :test_page,
+      },
+      test_annotation_2: %{
+        type: :annotation,
+        title: "Page Speed",
+        annotation_type: :outline,
+        label: "1",
+        description: "This is the page speed.",
+        page: :test_page,
       }
+    },
+    job: %{
     }
   )
 
@@ -442,12 +576,13 @@ defmodule State.State do
 
   def create(state, type, key, value) do
     #IO.puts("Creating Object")
+    IO.inspect(value)
     state
     |> Map.pop(type)
     |> create_object(key, value)
     |> put_objects_on_state(type)
     |> get(type, [ key ])
-    |> live_broadcast(type)
+    |> live_broadcast(:create, type)
   end
 
   def get(state, type, ids \\ []) do
@@ -469,11 +604,14 @@ defmodule State.State do
 
   def delete(state, type, key) do
     #IO.puts("Deleting #{type} -> key")
-    state = state
-    |> Map.pop(type)
-    |> delete_object(key)
-    |> put_objects_on_state(type)
-    { state, key}
+    {
+      state
+      |> Map.pop(type)
+      |> delete_object(key)
+      |> put_objects_on_state(type)
+      |> live_broadcast(:delete, key, type),
+      key
+    }
   end
 
   @doc """
@@ -503,10 +641,31 @@ defmodule State.State do
 
   ######################### Private functions #################################
 
-  def live_broadcast({ state, data }, type) do
+  def live_broadcast({ state, data }, command, type) do
     #IO.puts("Broadcasting")
-    Phoenix.PubSub.broadcast(:live_state, Atom.to_string(type), { data })
+    Phoenix.PubSub.broadcast(
+      :live_state,
+      Atom.to_string(type),
+      {
+        command,
+        Map.keys(data)
+        |> Enum.at(0),
+        Map.values(data)
+        |> Enum.at(0)
+      })
     { state, data }
+  end
+  def live_broadcast(state, :delete, id, type) do
+    IO.puts("Broadcasting delete")
+    Phoenix.PubSub.broadcast(
+      :live_state,
+      Atom.to_string(type),
+      {
+        :delete,
+        type,
+        id
+      }
+    )
   end
 
   def put_objects_on_state({ state, objects }, type) do

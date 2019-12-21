@@ -1,21 +1,5 @@
 defmodule TaskRunner do
-  @moduledoc """
-  Documentation for TaskRunner.
-  """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> TaskRunner.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
-
-
+  defdelegate create_job(job_type, data), to: TaskRunner.Annotate
 
 end

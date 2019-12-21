@@ -19,6 +19,18 @@ defmodule LiveViewWeb.Helpers do
     )
   end
 
+  def has_children(parent_type, parent_id, child_objects) do
+    Enum.reduce(
+      child_objects,
+      false,
+      fn({ id, object }, has_children ) ->
+        if parent_id == object[parent_type] do
+          true
+        end
+      end
+    )
+  end
+
   def get(socket, type, keys) do
     assign(
       socket,
@@ -45,6 +57,9 @@ defmodule LiveViewWeb.Helpers do
     #IO.puts("Views.Helpers.create function #{type}")
     value = Map.from_struct(changeset_result)
     State.create(type, String.to_atom(value.id), value)
+  end
+  def create(value, id, type) do
+    State.create(type, id, value)
   end
 
   def assign_parent_type(annotation) do
@@ -89,13 +104,16 @@ defmodule LiveViewWeb.Helpers do
     )
   end
 
-  def handle_subscription({ data, socket }) do
+  def handle_subscription({ :create, id, object, socket }) do
     #IO.puts("Handling Subscription")
-    { data, socket }
+    #IO.inspect(data)
+    { %{ id: object }, socket }
     |> extract_object
     |> inject_object
     |> add_object
-
+  end
+  def handle_subscription({ :delete, type, id }) do
+    IO.puts("Handling delete")
   end
 
   def extract_object({ data, socket }) do
@@ -112,7 +130,7 @@ defmodule LiveViewWeb.Helpers do
       {
         id,
         Enum.reduce(
-          socket.assigns.injections[String.to_atom(object.type)],
+          socket.assigns.injections[object.type],
           object,
           fn { key, value}, acc ->
             Map.put(object, key, value)
@@ -124,7 +142,7 @@ defmodule LiveViewWeb.Helpers do
   end
 
   def add_object({{ id, object }, socket }) do
-    type = String.to_atom(object.type)
+    type = object.type
     {
       :noreply,
       assign(

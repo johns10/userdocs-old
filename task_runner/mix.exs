@@ -13,6 +13,7 @@ defmodule TaskRunner.MixProject do
 
   def application do
     [
+      mod: { TaskRunner.Application, [] },
       extra_applications: [:logger]
     ]
   end
@@ -21,7 +22,9 @@ defmodule TaskRunner.MixProject do
     [
       {:state, path: "../state"},
       {:script, path: "../script"},
-      {:web_driver, path: "../web_driver"}
+      {:web_driver, path: "../web_driver"},
+      {:uuid, "~> 1.1"},
+      {:phoenix_pubsub, "~> 1.0"}
     ]
   end
 end

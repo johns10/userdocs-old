@@ -37,9 +37,17 @@ defmodule WebDriver.Procedure do
     |> WebDriver.Driver.h_fill_field(text)
     :ok
   end
-  def execute_procedure_step({ :javascript, args }) do
+  def execute_procedure_step({ :page_screenshot, _args }) do
+    IO.puts("Capturing page Screenshot")
+    %{ "height" => height, "width" => width } = WebDriver.Driver.h_execute_script(
+      prototype(:page_dimensions)
+    )
+    WebDriver.Driver.h_set_window_size(width, height)
+    WebDriver.Driver.h_take_screenshot()
+    :ok
+  end
+  def execute_procedure_step({ :javascript, args = %{ script_type: script_type } }) do
     IO.puts("Executing Javascript Step")
-    { script_type, args } = Map.pop(args, :script_type)
     WebDriver.Driver.h_execute_script(
       prototype(script_type),
       ordered_arguments(args, script_type)

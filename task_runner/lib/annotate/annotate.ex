@@ -15,24 +15,54 @@ defmodule TaskRunner.Annotate do
   def annotate_project(project_id) do
   end
 
+  def annotate_page(page_id) do
+    { :ok, pid } = WebDriver.Server.start_link()
+
+    State.get(:page, page_id)
+    |> Map.values()
+    |> Enum.at(0)
+    |> Map.get(:project)
+    |> get_project_procedure()
+    |> IO.inspect()
+    |> WebDriver.execute_procedure(pid)
+
+    page_id
+    |> get_page_procedure()
+    |> WebDriver.execute_procedure(pid)
+
+    { :ok }
+  end
+
   def get_project_data(project_id) do
     project_steps = State.get_all_related_data(:project, [project_id], :step)
     project_pages = State.get_all_related_data(:project, [project_id], :page)
 
   end
 
-  def get_page_procedure(page_id) do
-    { :ok, pid } = WebDriver.Server.start_link()
-
-    State.get_all_related_data(:page, [page_id], :step)
+  def get_project_procedure(project_id) do
+    State.get_all_related_data(:project, [project_id], :step)
     |> Enum.into([])
-    |> Enum.sort(
-      fn({ _, object1 }, { _, object2 }) ->
-        Map.get(object1, :order) > Map.get(object2, :order)
-      end)
+    |> Enum.sort(&order/2)
     |> process_steps()
-    |> IO.inspect()
-    #|> WebDriver.execute_procedure(pid)
+  end
+
+  def get_page_procedure(page_id) do
+    State.get_all_related_data(:page, [page_id], :step)
+    |> add_page_annotations_steps(page_id)
+    |> Enum.into([])
+    |> Enum.sort(&order/2)
+    |> process_steps()
+  end
+
+  def add_page_annotations_steps(pages, page_id) do
+    State.get_all_related_data(:page, [page_id], :annotation)
+    |> Map.keys()
+    |> get_annotation_steps()
+    |> Map.merge(pages)
+  end
+
+  def get_annotation_steps(annotation_ids) do
+    State.get_all_related_data(:annotation, annotation_ids, :step)
   end
 
   def process_steps(steps) do
@@ -41,7 +71,7 @@ defmodule TaskRunner.Annotate do
     |> Enum.reduce([], &convert_step/2)
   end
 
-  def convert_step({ key, step }, steps) do
+  def convert_step({ _key, step }, steps) do
     [ { step.step_type, step.args } | steps ]
   end
 
@@ -52,11 +82,15 @@ defmodule TaskRunner.Annotate do
     |> Enum.reduce([], &convert_annotation/2)
   end
 
-  def convert_annotation({ key, annotation }, script_parameters) do
+  def convert_annotation({ _key, annotation }, script_parameters) do
     [
       %{ type: annotation.annotation_type, args: Enum.into(annotation.args, [] ) } |
       script_parameters
     ]
+  end
+
+  def order( { _, object1 }, { _, object2 } ) do
+    Map.get(object1, :order) > Map.get(object2, :order)
   end
 
 end

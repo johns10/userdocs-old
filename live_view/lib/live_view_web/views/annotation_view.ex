@@ -20,13 +20,9 @@ defmodule LiveViewWeb.Annotation do
         <%= annotation.title %> <%= annotation.active %>
         <div uk-grid>
           <div class="uk-width-1-2@s">
-            <%= annotation.strategy %>
-          </div>
-          <div class="uk-width-1-2@s">
             <% annotation.annotation_type %>
           </div>
           <div class="uk-width-1-1">
-            <%= annotation.selector %></br>
             <%= annotation.description %></br>
           </div>
         </div>

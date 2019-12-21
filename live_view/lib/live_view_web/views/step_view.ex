@@ -16,12 +16,9 @@ defmodule LiveViewWeb.StepView do
         <div class="uk-width-1-2">
           <%= step.step_type %>
         </div>
-        <div class="uk-width-1-2">
-          <% step.strategy %>
-        </div>
         <div class="uk-width-1-1">
           <%= for { key, value } <- step.args do %>
-            <%= key %></br><%= value %>
+            <%= key %>: <%= value %></br>
           <%= end %>
         </div>
       </div>

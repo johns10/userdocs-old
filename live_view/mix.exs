@@ -32,6 +32,9 @@ defmodule LiveView.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:state, path: "../state"},
+      {:storage, path: "../storage"},
+      {:task_runner, path: "../task_runner"},
       {:phoenix, "~> 1.4.10"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_html, "~> 2.11"},
@@ -41,9 +44,7 @@ defmodule LiveView.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
       #{:floki, ">= 0.0.0", only: :test},
-      {:state, path: "../state"},
-      {:storage, path: "../storage"},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
     ]
   end
 end

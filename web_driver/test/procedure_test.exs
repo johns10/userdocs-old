@@ -7,7 +7,7 @@ defmodule ProcedureTest do
   alias WebDriver.Driver
 
   hound_session(driver: Driver.setup())
-"""
+
   test "executes a navigate step" do
     Procedure.execute_procedure_step({
       :navigate,
@@ -128,7 +128,6 @@ defmodule ProcedureTest do
     |> visible_text()
     assert(text == "Thank You for your Message!")
   end
-  """
 
   test "executes an javascript step" do
     procedure = [
