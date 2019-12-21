@@ -23,7 +23,8 @@ defmodule State.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:phoenix_pubsub, "~> 1.0"}
+      {:phoenix_pubsub, "~> 1.0"},
+      {:state_handlers, path: "../state_handlers"}
     ]
   end
 end

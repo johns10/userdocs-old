@@ -567,6 +567,8 @@ defmodule State.State do
       }
     },
     job: %{
+    },
+    task: %{
     }
   )
 
@@ -574,69 +576,25 @@ defmodule State.State do
     %State.State{}
   end
 
-  def create(state, type, key, value) do
-    #IO.puts("Creating Object")
-    IO.inspect(value)
-    state
-    |> Map.pop(type)
-    |> create_object(key, value)
-    |> put_objects_on_state(type)
-    |> get(type, [ key ])
+  def create(state, type, key, object) do
+    StateHandlers.create(state, type, key, object)
     |> live_broadcast(:create, type)
   end
 
   def get(state, type, ids \\ []) do
-    #IO.puts("Getting Data of type #{type} with keys:")
-    #IO.inspect(ids)
-    get_data_type({ state }, type)
-    |> get_by_ids(ids)
-    #|> get_relationships()
+    StateHandlers.get(state, type, ids)
   end
 
-  def update(state, type, key, value) do
-    #IO.puts("Updating #{type} -> #{key}")
-    state
-    |> Map.pop(type)
-    |> update_object(key, value)
-    |> put_objects_on_state(type)
-    |> get(type, [ key ])
+  def update(state, type, key, object) do
+    StateHandlers.update(state, type, key, object)
   end
 
-  def delete(state, type, key) do
-    #IO.puts("Deleting #{type} -> key")
-    {
-      state
-      |> Map.pop(type)
-      |> delete_object(key)
-      |> put_objects_on_state(type)
-      |> live_broadcast(:delete, key, type),
-      key
-    }
+  def delete(state, type, id) do
+    StateHandlers.delete(state, type, id)
   end
 
-  @doc """
-  Takes a list of objects, and a type of relationship.  Makes a list of the
-  related ids, by the given type, and queries the state for the ID's in that
-  list.
-  Used to get all the objects related in a single shot.
-  """
   def get_all_related_data(state, from_type, from_ids, to_type) do
-    { state, to_data } = get(state, to_type)
-    ids = Enum.reduce(
-      to_data,
-      [],
-      fn { id, object }, ids ->
-        try do
-          true = Enum.member?(from_ids, object[from_type])
-          [ id | ids ]
-        rescue
-          MatchError -> ids
-        end
-      end
-    )
-    |> List.flatten()
-    |> Enum.uniq()
-    get(state, to_type, ids)
+    StateHandlers.get_related(state, from_type, from_ids, to_type)
   end
 
   ######################### Private functions #################################
@@ -647,6 +605,7 @@ defmodule State.State do
       :live_state,
       Atom.to_string(type),
       {
+        type,
         command,
         Map.keys(data)
         |> Enum.at(0),
@@ -666,45 +625,6 @@ defmodule State.State do
         id
       }
     )
-  end
-
-  def put_objects_on_state({ state, objects }, type) do
-    Map.put(state, type, objects)
-  end
-
-  def delete_object({ objects, state }, key) do
-    { state, Map.delete(objects, key) }
-  end
-
-  #TODO: This creates non-existent keys.  Should raise Keyerror
-  def update_object({ objects, state }, key, value) do
-    #IO.puts("Updating Object")
-    result = Map.update!(objects, key, fn (_x) -> value end)
-    { state, result }
-  end
-
-  def create_object({ objects, state }, key, value) do
-    { state, Map.put(objects, key, value) }
-  end
-
-  def get_data_type({ state }, type ) do
-    {:ok, result} = Map.fetch(state, type)
-    { state, result }
-  end
-
-  def get_by_ids({ state, data }, [] ) do
-    #IO.puts("Passing get by ids")
-    { state, data }
-  end
-  def get_by_ids({ state, data }, [ id | [] ] ) do
-    { state, Map.take(data, [ id ])}
-  end
-  def get_by_ids({ state, data }, ids = [ _id | _id_list ] ) do
-    #IO.puts("Getting by ID's")
-    { state, Map.take(data, ids) }
-  end
-  def get_by_ids({ state, data }, id ) do
-    { state, Map.take(data, [ id ])}
   end
 
   def get_reverse_relationship(state, { id_from, object_from }, related_type) do

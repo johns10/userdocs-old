@@ -104,6 +104,8 @@ defmodule LiveViewWeb.Helpers do
     )
   end
 
+  """
+
   def handle_subscription({ :create, id, object, socket }) do
     #IO.puts("Handling Subscription")
     #IO.inspect(data)
@@ -152,5 +154,7 @@ defmodule LiveViewWeb.Helpers do
       )
     }
   end
+
+  """
 
 end

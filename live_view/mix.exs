@@ -34,7 +34,9 @@ defmodule LiveView.MixProject do
     [
       {:state, path: "../state"},
       {:storage, path: "../storage"},
-      {:task_runner, path: "../task_runner"},
+      {:job, path: "../job"},
+      {:state_handlers, path: "../state_handlers"},
+      {:subscription, path: "../subscription"},
       {:phoenix, "~> 1.4.10"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_html, "~> 2.11"},

@@ -155,17 +155,25 @@ defmodule LiveViewWeb.PagesView do
       AnnotationForm.changeset(
         %AnnotationForm{},
         %{},
-        %{ pages: socket.assigns.page, annotation_types: socket.assigns.annotation_type }
+        %{
+          pages: socket.assigns.page,
+          annotation_types: socket.assigns.annotation_type
+        }
       )
     )
     { :ok, socket }
   end
 
-  def handle_info({ command, id, object }, socket) do
-    Helpers.handle_subscription({ command, id, object, socket })
-  end
-  def handle_info({ :delete, type, id }) do
-    Helpers.handle_subscription({ :delete, type, id })
+  def handle_info({ type, command, id, object }, socket) do
+    {
+      :noreply,
+      assign(
+        socket,
+        Subscription.Handler.handle(
+          type, command, id, object, socket.assigns
+        )
+      )
+    }
   end
 
   def handle_event("active_element", %{ "id" => id, "type" => type }, socket) do

@@ -1,7 +1,7 @@
 defmodule StateHelpersTest do
   use ExUnit.Case
   doctest State
-
+"""
   test "get_all_relationship data gets the right data" do
     from_ids = [:default, :default2]
     from_type = :page
@@ -93,87 +93,7 @@ defmodule StateHelpersTest do
     assert(result == expected_result)
   end
 
-  test "gets all the objects" do
-    state = State.State.new_state()
-    type = :step_type
-    { :ok, expected_result } = Map.fetch(state, type)
-    { _state, result } = State.State.get(state, type, [])
-    assert result == expected_result
-  end
 
-  test "gets several object" do
-    state = State.State.new_state()
-    type = :step_type
-    ids = [ :navigate, :click ]
-    { :ok, data_type } = Map.fetch(state, type)
-    expected_result = Map.take(data_type, ids)
-    { _state, result } = State.State.get(state, type, ids)
-    assert(result == expected_result)
-  end
-
-  test "gets one object" do
-    state = State.State.new_state()
-    type = :step_type
-    ids = [ :navigate ]
-    { :ok, data_type } = Map.fetch(state, type)
-    expected_result = Map.take(data_type, ids)
-    { _state, result } = State.State.get(state, type, ids)
-    assert(result == expected_result)
-  end
-
-
-  test "create new creates a new object" do
-    state = State.State.new_state()
-    type = :step_type
-    key = :test_step_type
-    value = %{
-        type: :step_type,
-        args: [:test, :test]
-    }
-    { state, result } = State.State.create(state, type, key, value)
-    expected_result = state.step_type.test_step_type
-    assert(result == %{ key => expected_result})
-  end
-
-  test "update updates an object" do
-    state = State.State.new_state()
-    type = :step_type
-    key = :wait
-    value = %{
-      type: :test,
-      attributes: %{
-        args: [:face, :test]
-      }
-    }
-    { state, _result } = State.State.update(state, type, key, value)
-    { :ok, step_types } = Map.fetch(state, type)
-    assert(value == step_types[key])
-  end
-  test "delete deletes an object" do
-    state = State.State.new_state()
-    type = :step_type
-    key = :wait
-    { state, _id } = State.State.delete(state, type, key)
-    { :ok, step_types } = Map.fetch(state, type)
-    assert(step_types[key] == nil)
-  end
-
-
-  '''
-  test "updating a non-existent record fails" do
-    state = State.State.new_state()
-    type = :step_type
-    key = :new
-    value = %{
-      type: :page,
-      attributes: %{
-        args: [:new, :face]
-      }
-    }
-    { state, result } = State.State.update(state, type, key, value)
-    #IO.inspect(result)
-
-  end
 
   test "get_relationship_data returns related data when requested" do
     state = State.State.new_state()
@@ -214,7 +134,7 @@ defmodule StateHelpersTest do
     expected_result = [ default_procedure: %{ attributes: %{name: "Procedure Name"}, relationships: [ page: %{ default: %{ attributes: %{url: "www.google.com"}, relationships: %{procedure: :default_procedure}, type: :page } }, step: %{ default: %{ attributes: %{ args: [ selector: "/html//form[@id='tsf']//div[@class='A8SBwf']/div[@class='FPdoLc VlcLAe']/center/input[@name='btnK']" ], strategy: :xpath }, relationships: %{step_type: :wait}, type: :step } } ], type: :procedure } ]
     assert(result == expected_result)
   end
-'''
+"""
 
 
 end

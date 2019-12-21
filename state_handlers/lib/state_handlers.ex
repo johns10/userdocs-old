@@ -1,18 +1,13 @@
 defmodule StateHandlers do
-  @moduledoc """
-  Documentation for StateHandlers.
-  """
 
-  @doc """
-  Hello world.
+  defdelegate get(state, type, ids \\ []), to: StateHandlers.Handle
 
-  ## Examples
+  defdelegate get_related(state, from_type, from_ids, to_type), to: StateHandlers.Handle
 
-      iex> StateHandlers.hello()
-      :world
+  defdelegate create(state, type, id, object), to: StateHandlers.Handle
 
-  """
-  def hello do
-    :world
-  end
+  defdelegate update(state, type, id, object), to: StateHandlers.Handle
+
+  defdelegate delete(state, type, id), to: StateHandlers.Handle
+
 end
