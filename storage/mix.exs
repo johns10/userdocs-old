@@ -24,7 +24,8 @@ defmodule Storage.MixProject do
     [
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_ecto, "~> 4.0"}
+      {:phoenix_ecto, "~> 4.0"},
+      {:pow, "~> 1.0.15"}
     ]
   end
 end

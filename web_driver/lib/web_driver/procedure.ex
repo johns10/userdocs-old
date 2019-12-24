@@ -6,8 +6,8 @@ defmodule WebDriver.Procedure do
     execute_procedure( :ok, procedure )
   end
   def execute_procedure( :ok, [ step | procedure ] ) do
-    IO.puts("executing procedure")
-    IO.inspect(step)
+    #IO.puts("executing procedure")
+    #IO.inspect(step)
     step
     |> execute_procedure_step()
     |> execute_procedure(procedure)
@@ -16,29 +16,29 @@ defmodule WebDriver.Procedure do
   end
 
   def execute_procedure_step({ :navigate, %{ url: url } }) do
-    IO.puts("Executing Navigation Step #{url}")
+    #IO.puts("Executing Navigation Step #{url}")
     WebDriver.Driver.h_navigate_to(url)
     :ok
   end
   def execute_procedure_step({ :wait, %{ strategy: strategy, selector: selector } }) do
-    IO.puts(selector)
+    #IO.puts(selector)
     wait_until_available(strategy, selector, 10)
     :ok
   end
   def execute_procedure_step({ :click, %{ strategy: strategy, selector: selector } }) do
-    IO.puts("Executing Click Step")
+    #IO.puts("Executing Click Step")
     WebDriver.Driver.h_find_element(strategy, selector, @default_retries)
     |> WebDriver.Driver.h_click()
     :ok
   end
   def execute_procedure_step({ :fill_field, %{ strategy: strategy, selector: selector, text: text } }) do
-    IO.puts("Executing fill field step")
+    #IO.puts("Executing fill field step")
     WebDriver.Driver.h_find_element(strategy, selector, @default_retries)
     |> WebDriver.Driver.h_fill_field(text)
     :ok
   end
   def execute_procedure_step({ :page_screenshot, _args }) do
-    IO.puts("Capturing page Screenshot")
+    #IO.puts("Capturing page Screenshot")
     %{ "height" => height, "width" => width } = WebDriver.Driver.h_execute_script(
       prototype(:page_dimensions)
     )
@@ -47,7 +47,7 @@ defmodule WebDriver.Procedure do
     :ok
   end
   def execute_procedure_step({ :javascript, args = %{ script_type: script_type } }) do
-    IO.puts("Executing Javascript Step")
+    #IO.puts("Executing Javascript Step")
     WebDriver.Driver.h_execute_script(
       prototype(script_type),
       ordered_arguments(args, script_type)

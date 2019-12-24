@@ -3,12 +3,6 @@
 // its own CSS file.
 import css from "../css/app.css"
 
-import UIkit from 'uikit';
-import Icons from 'uikit/dist/js/uikit-icons';
-
-// loads the Icon plugin
-UIkit.use(Icons);
-
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
 // in "webpack.config.js".

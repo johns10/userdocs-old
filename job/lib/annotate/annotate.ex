@@ -16,7 +16,7 @@ defmodule Job.Annotate do
 
   def annotate_project(project_id) do
   end
-
+"""
   def annotate_page(page_id) do
     { :ok, pid } = WebDriver.Server.start_link()
 
@@ -41,29 +41,6 @@ defmodule Job.Annotate do
 
   end
 
-  def get_page_procedure(page_id) do
-    State.get_all_related_data(:page, [page_id], :step)
-    |> add_page_annotations_steps(page_id)
-    |> Enum.into([])
-    |> Enum.sort(&order/2)
-    |> process_steps()
-  end
-
-  def add_page_annotations_steps(pages, page_id) do
-    State.get_all_related_data(:page, [page_id], :annotation)
-    |> Map.keys()
-    |> get_annotation_steps()
-    |> Map.merge(pages)
-  end
-
-  def get_annotation_steps(annotation_ids) do
-    State.get_all_related_data(:annotation, annotation_ids, :step)
-  end
-
-  def convert_step({ _key, step }, steps) do
-    [ { step.step_type, step.args } | steps ]
-  end
-
   def process_annotations(annotations) do
     IO.inspect(annotations)
     annotations
@@ -77,5 +54,7 @@ defmodule Job.Annotate do
       script_parameters
     ]
   end
+
+  """
 
 end

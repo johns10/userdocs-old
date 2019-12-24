@@ -1,0 +1,34 @@
+{
+	"name": "Inject sidebar",
+	"manifest_version": 2,
+	"description": "Inject a sidebar on the current tab when the page action is clicked",
+	"version": "0.2",
+	"background": {
+    "scripts": ["background.js"],
+		"persistent": false
+	},
+	"page_action": {
+		"default_icon": "icon.png",
+		"default_title": "UserDocs"
+	},
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["browser.js"],
+      "run_at": "document_end",
+			"all_frames": false
+		}
+	],
+	"permissions": [
+		"tabs",
+		"activeTab",
+		"storage"
+	],
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"web_accessible_resources": [
+		"index.html",
+		"app.css",
+		"bundle.js",
+		"extension.js"
+  ]
+}

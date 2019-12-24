@@ -65,7 +65,7 @@ defmodule LiveViewWeb.Annotation do
           </div>
           <div class="uk-width-1-1">
             <div class="uk-margin uk-form-controls">
-              <%= text_input f, :selector, placeholder: "Selector", value: "Selector" %>
+              <%= text_input f, :selector, placeholder: "Selector", value: "Selector", id: "userdocs-selector-form-field" %>
             </div>
           </div>
           <div class="uk-width-1-2@s">

@@ -13,6 +13,12 @@ defmodule State.State do
         type:     :web
       }
     },
+    version: %{
+      one: %{
+        version: 1.0,
+        project: :test
+      }
+    },
     page: %{
       default: %{
         type:       :page,
@@ -587,6 +593,7 @@ defmodule State.State do
 
   def update(state, type, key, object) do
     StateHandlers.update(state, type, key, object)
+    |> live_broadcast(:update, type)
   end
 
   def delete(state, type, id) do

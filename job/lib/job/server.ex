@@ -17,6 +17,11 @@ defmodule Job.Server do
   def handle_info({ :job, :create, id, object }, state ) do
     state = Subscription.Handler.handle(:job, :create, id, object, state)
     Job.Builder.build(id, object)
+    Job.Executor.execute(id)
     { :noreply, state }
   end
+  def handle_info({ :job, :update, id, object }, state ) do
+    { :noreply, state }
+  end
+
 end

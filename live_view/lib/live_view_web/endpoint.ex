@@ -31,7 +31,8 @@ defmodule LiveViewWeb.Endpoint do
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Phoenix.json_library()
+    json_decoder: Phoenix.json_library(),
+    url: [host: "localhost", path: "/", port: 4000]
 
   plug Plug.MethodOverride
   plug Plug.Head
@@ -43,6 +44,8 @@ defmodule LiveViewWeb.Endpoint do
     store: :cookie,
     key: "_live_view_key",
     signing_salt: "bczYqgIu"
+
+  plug Pow.Plug.Session, otp_app: :live_view
 
   plug LiveViewWeb.Router
 end

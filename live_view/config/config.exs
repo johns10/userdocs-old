@@ -38,3 +38,7 @@ config :storage, Storage.Repo,
   password: "postgres",
   hostname: "localhost",
   port: "5433"
+
+  config :live_view, :pow,
+    user: Storage.Users.User,
+    repo: Storage.Repo

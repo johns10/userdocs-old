@@ -20,9 +20,30 @@ defmodule JobTest do
     Job.Annotate.get_page_procedure(:at_a_glance)
   end
 
-  """
-
   test "Annotate page generates screenshot" do
     Job.Annotate.annotate_page(:test_page)
   end
+
+  """
+  #TODO Build out with fixed test data later
+  test "Job Builder builds tasks" do
+    Job.Builder.build(:test, %{ job_type: :annotate, page: :test_page })
+    State.get(:task, [])
+    #|> IO.inspect()
+  end
+
+  test "Job Executor executes job" do
+    State.create(
+      :job,
+      :test,
+      %{
+        status: :not_started,
+        job_type: :annotate,
+        page: :test_page
+      }
+    )
+    #Job.Builder.build(:test, %{ job_type: :annotate, page: :test_page })
+    Job.Executor.execute(:test)
+  end
+
 end
