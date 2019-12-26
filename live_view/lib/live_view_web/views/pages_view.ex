@@ -104,19 +104,28 @@ defmodule LiveViewWeb.PagesView do
     """
   end
 
-  def mount(_session, socket) do
+  def mount(session, socket) do
     :pg2.join(:live_state, self())
 
     # UI Data
     socket = assign(socket, new_annotation: false)
     # Application Data Slots
+    socket = assign(socket, user: %{})
+    socket = assign(socket, team_member: %{})
+    socket = assign(socket, team: %{})
     socket = assign(socket, project: %{})
     socket = assign(socket, page: %{})
     socket = assign(socket, step: %{})
     socket = assign(socket, annotation: %{})
     socket = assign(socket, job: %{})
     # Application Data
-    socket = Helpers.get(socket, :project, [:test])
+    user_id = session.current_user.id |> Integer.to_string() |> String.to_atom()
+    IO.inspect(session.current_user)
+    socket = Helpers.get(socket, :user, [user_id])
+    socket = Helpers.get_all_related_data(socket, :user, [user_id], :team_member)
+    socket = Helpers.get_all_related_data(socket, :team_member, Map.keys(socket.assigns.user), :team)
+    socket = Helpers.get_all_related_data(socket, :team, Map.keys(socket.assigns.team), :project)
+    #socket = Helpers.get(socket, :project, [:test])
     socket = Helpers.get_all_related_data(socket, :project, Map.keys(socket.assigns.project), :page)
     socket = Helpers.get_all_related_data(socket, :project, Map.keys(socket.assigns.project), :step)
     socket = Helpers.get_all_related_data(socket, :project, Map.keys(socket.assigns.project), :job)

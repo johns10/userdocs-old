@@ -2,24 +2,26 @@ defmodule StateTest do
   use ExUnit.Case
   doctest State
 
+  test "gets all the objects" do
+    state = State.State.new_state()
+    type = :user
+    { :ok, expected_result } = Map.fetch(state, type)
+    { _state, result } = State.State.get(state, type, [])
+    IO.inspect(result)
+    assert result == expected_result
+  end
+
   test "gets one object" do
     state = State.State.new_state()
-    type = :step_type
-    ids = [ :navigate ]
+    type = :user
+    ids = [ 1 ]
     { :ok, data_type } = Map.fetch(state, type)
     expected_result = Map.take(data_type, ids)
     { _state, result } = State.State.get(state, type, ids)
     assert(result == expected_result)
   end
 
-  test "gets all the objects" do
-    state = State.State.new_state()
-    type = :step_type
-    { :ok, expected_result } = Map.fetch(state, type)
-    { _state, result } = State.State.get(state, type, [])
-    assert result == expected_result
-  end
-
+  """
   test "gets several object" do
     state = State.State.new_state()
     type = :step_type
@@ -113,5 +115,5 @@ defmodule StateTest do
       test_to_two: %{a: 2, from_type: :test_from_one}
     }
   end
-
+"""
 end

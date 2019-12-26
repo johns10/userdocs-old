@@ -39,6 +39,7 @@ config :storage, Storage.Repo,
   hostname: "localhost",
   port: "5433"
 
-  config :live_view, :pow,
-    user: Storage.Users.User,
-    repo: Storage.Repo
+config :live_view, :pow,
+  user: Storage.Users.User,
+  repo: Storage.Repo,
+  users_context: LiveView.Users

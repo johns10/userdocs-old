@@ -1,16 +1,41 @@
 defmodule State.State do
 
   defstruct(
+    user: [
+      %Storage.Users.User{
+        confirm_password: nil,
+        current_password: nil,
+        email: "johns10davenport@gmail.com",
+        id: 1,
+        inserted_at: ~N[2019-12-24 15:08:53],
+        password: nil,
+        password_hash: "$pbkdf2-sha512$100000$iyJxvjj7CZ1ccwBgGxWEmQ==$uytDjvG7F3+Ql86zZNGK6gfjpl3MjUmhgP7qX8Q/g5JzRW5jAREsrmLn0P3+16ewvqpdPnbyXVRo2uLTOyrUeA==",
+        updated_at: ~N[2019-12-24 15:08:53]
+      }
+    ],
+    team_member: %{
+      :"1" => %{
+        user: :"1",
+        team: :"1"
+      }
+    },
+    team: %{
+      :"1" => %{
+        name: "Test"
+      }
+    },
     project: %{
       funnel_cloud: %{
         title:    "FunnelCloud Staging",
         base_url: "https://staging.app.funnelcloud.io",
-        type:     :web
+        type:     :web,
+        team:     :"2"
       },
       test: %{
         title:    "Test Project",
         base_url: "http://webdriveruniversity.com/",
-        type:     :web
+        type:     :web,
+        team:     :"1"
       }
     },
     version: %{

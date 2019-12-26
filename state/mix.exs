@@ -24,7 +24,8 @@ defmodule State.MixProject do
   defp deps do
     [
       {:phoenix_pubsub, "~> 1.0"},
-      {:state_handlers, path: "../state_handlers"}
+      {:state_handlers, path: "../state_handlers"},
+      {:storage, path: "../storage"}
     ]
   end
 end
