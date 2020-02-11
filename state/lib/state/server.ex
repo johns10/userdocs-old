@@ -8,20 +8,20 @@ defmodule State.Server do
     { :ok, pid }
   end
 
-  def create(type, key, value, pid \\ __MODULE__) do
-    GenServer.call(pid, { :create, type, key, value })
+  def create(type, object, pid \\ __MODULE__) do
+    GenServer.call(pid, { :create, type, object })
   end
 
-  def get(type, keys, pid \\ __MODULE__) do
-    GenServer.call(pid, { :get, type, keys })
+  def get(type, ids, pid \\ __MODULE__) do
+    GenServer.call(pid, { :get, type, ids })
   end
 
-  def update(type, key, value, pid \\ __MODULE__) do
-    GenServer.call(pid, { :update, type, key, value })
+  def update(type, object, pid \\ __MODULE__) do
+    GenServer.call(pid, { :update, type, object })
   end
 
-  def delete(type, key, pid \\ __MODULE__) do
-    GenServer.call(pid, { :delete, type, key })
+  def delete(type, object, pid \\ __MODULE__) do
+    GenServer.call(pid, { :delete, type, object })
   end
 
   def get_all_related_data(from_type, from_ids, to_type, pid \\ __MODULE__) do
@@ -39,23 +39,23 @@ defmodule State.Server do
     { :reply, result, state }
   end
 
-  def handle_call({ :get_all_related_data, from_type, from_ids, to_type }, _from, state) do
-    { state, result } = State.State.get_all_related_data(state, from_type, from_ids, to_type)
+  def handle_call({ :get_all_related_data, from_type, from_data, to_type }, _from, state) do
+    { state, result } = State.State.get_all_related_data(state, from_type, from_data, to_type)
     { :reply, result, state }
   end
 
-  def handle_call({ :create, type, key, value }, _from, state) do
-    { state, result } = State.State.create(state, type, key, value)
+  def handle_call({ :create, type, object }, _from, state) do
+    { state, result } = State.State.create(state, type, object)
     { :reply, result, state }
   end
 
-  def handle_call({ :update, type, key, value }, _from, state) do
-    { state, result } = State.State.update(state, type, key, value)
+  def handle_call({ :update, type, object }, _from, state) do
+    { state, result } = State.State.update(state, type, object)
     { :reply, result, state }
   end
 
-  def handle_call({ :delete, type, key }, _from, state) do
-    { state, key } = State.State.delete(state, type, key)
+  def handle_call({ :delete, type, object }, _from, state) do
+    { state, key } = State.State.delete(state, type, object)
     { :reply, key, state }
   end
 

@@ -22,7 +22,6 @@ defmodule GraphqlWeb.Context do
 Depreciated in favor of singleton state.
   defp build_context(conn) do
     state = State.new()
-    IO.inspect(state)
     {:ok, %{state: state}}
   end
   '''

@@ -1,10 +1,136 @@
-defmodule LiveViewWeb.Annotation do
+defmodule LiveViewWeb.AnnotationView do
   use Phoenix.LiveView
   use Phoenix.HTML
+
+  alias LiveViewWeb.Helpers
+  alias LiveViewWeb.Types
 
   def render(assigns) do
     ~L"""
     Hello
+    """
+  end
+
+  def render(step, assigns, :header_only) do
+    ~L"""
+    <li class="list-group-item">
+      <%= render(step, assigns, :header) %>
+    </li>
+    """
+  end
+
+  def render(assigns, annotation, :header_form) do
+    ~L"""
+    <li class="list-group-item">
+      <%= render(assigns, annotation, :header) %>
+      <%= render(assigns, annotation, :form) %>
+    </li>
+    """
+  end
+
+  def render(assigns, annotation, :header) do
+    ~L"""
+    <div
+      href="#"
+      phx-click="page_annotation_expand"
+      phx-value-id=<%= annotation.id %>
+    >
+      <nav
+        class="navbar bg-light"
+        style="margin-top: -12px; margin-bottom: -12px; margin-left: -20px; margin-right: -20px"
+      >
+        <div class="d-flex justify-content-start">
+          <%= annotation.name %>:
+          <%= Enum.find(@annotation_type, nil, fn (o) -> o.id == annotation.annotation_type_id end) |> Map.get(:name) %>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            phx-click="page_annotation_toggle_editable"
+            phx-value-id=<%= annotation.id %>
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+    """
+  end
+
+  def render(assigns, annotation, :form) do
+    ~L"""
+    <%= f = form_for(annotation.changeset, "annotation",
+      [ phx_submit: :annotation_update, phx_change: :"annotation::validate" ]
+    ) %>
+      <%= hidden_input f, :id, value: annotation.id %>
+      <%= hidden_input f, :annotation_type_id, value: annotation.annotation_type_id %>
+
+      </br>
+      <label>Name</label>
+      <%= text_input f, :name, class: "form-control", value: annotation.name %>
+      <label>Label</label>
+      <%= text_input f, :label, class: "form-control", value: annotation.label %>
+      <label>Description</label>
+      <%= text_input f, :description, class: "form-control", value: annotation.description %>
+      <label>Step Type</label>
+      <%=
+        select f, :annotation_type_id,
+        Helpers.select(assigns, :annotation_type),
+        value: annotation.annotation_type_id,
+        class: "form-control"
+      %>
+      <hr/>
+      <%= for step <- Helpers.children(assigns, :annotation_id, annotation, :step) do %>
+        <%= inputs_for f, String.to_atom("step-" <> Integer.to_string(step.id)), fn s -> %>
+          <div class="form-group">
+            <%= hidden_input s, :id, value: step.id %>
+            <%= hidden_input s, :storage_status, value: step.storage_status %>
+            <%= hidden_input s, :version_id, value: step.version_id %>
+            <%= hidden_input s, :annotation_id, value: step.annotation_id %>
+            <%= hidden_input s, :page_id, value: step.page_id %>
+            <%= hidden_input s, :order, value: step.order %>
+
+            <label>
+              Step Type
+            </label>
+            <%=
+              select s, :step_type_id,
+              Helpers.select(assigns, :step_type),
+              value: step.step_type_id,
+              class: "form-control"
+            %>
+            <div class="form-group">
+              <%= for { key, value } <- step.args do %>
+                <%= LiveViewWeb.Arg.render(key, value, f, step, assigns) %>
+                </hr>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      <%= if annotation.id in assigns.ui["project-steps-menu"]["editable"] do %>
+        <div class="d-flex flex-row-reverse bd-highlight mb-3">
+          <div class="p-2 bd-highlight">
+            <%=
+              submit "Save",
+              class: "btn btn-success"
+            %>
+          </div>
+          <div class="p-2 bd-highlight">
+            <button
+              type="button"
+              class="btn btn-danger"
+              phx-click="update_ui"
+              phx-value-ui-id="project-steps-menu"
+              phx-value-ui-element="new-step-menu"
+              phx-value-ui-value="false">
+              Cancel
+            </button>
+          </div>
+        </div>
+      <%= end %>
+    </form>
     """
   end
 
@@ -39,6 +165,7 @@ defmodule LiveViewWeb.Annotation do
     <% end %>
     """
   end
+
 
   def render(:form, parent_type, parent_id, {key, annotation}, assigns) do
     ~L"""

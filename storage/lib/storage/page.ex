@@ -2,8 +2,7 @@ defmodule Storage.Page do
   use Ecto.Schema
 
   schema "page" do
-    field :type, :string
     field :url, :string
-    has_many :annotation, Storage.Annotation
+    belongs_to :version, Storage.Version
   end
 end

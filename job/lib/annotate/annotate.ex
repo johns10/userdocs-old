@@ -25,7 +25,6 @@ defmodule Job.Annotate do
     |> Enum.at(0)
     |> Map.get(:project)
     |> get_project_procedure()
-    |> IO.inspect()
     |> WebDriver.execute_procedure(pid)
 
     page_id
@@ -42,7 +41,6 @@ defmodule Job.Annotate do
   end
 
   def process_annotations(annotations) do
-    IO.inspect(annotations)
     annotations
     |> Enum.into([])
     |> Enum.reduce([], &convert_annotation/2)

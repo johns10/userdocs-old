@@ -7,9 +7,9 @@ defmodule StateTest do
     type = :user
     { :ok, expected_result } = Map.fetch(state, type)
     { _state, result } = State.State.get(state, type, [])
-    IO.inspect(result)
     assert result == expected_result
   end
+  """
 
   test "gets one object" do
     state = State.State.new_state()
@@ -21,7 +21,6 @@ defmodule StateTest do
     assert(result == expected_result)
   end
 
-  """
   test "gets several object" do
     state = State.State.new_state()
     type = :step_type

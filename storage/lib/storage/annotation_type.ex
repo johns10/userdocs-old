@@ -3,9 +3,7 @@ defmodule Storage.AnnotationType do
 
   schema "annotation_type" do
 
-    field :script, :string
-    field :params, { :array, :string }
+    field :name, :string
 
-    has_many :annotation, Storage.Annotation
   end
 end

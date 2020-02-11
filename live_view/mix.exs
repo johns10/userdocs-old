@@ -38,6 +38,7 @@ defmodule LiveView.MixProject do
       {:state_handlers, path: "../state_handlers"},
       {:subscription, path: "../subscription"},
       {:users, path: "../users"},
+      {:userdocs, path: "../userdocs"},
       {:phoenix, "~> 1.4.10"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_html, "~> 2.11"},
@@ -47,7 +48,8 @@ defmodule LiveView.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
       {:uuid, "~> 1.1"},
-      {:pow, "~> 1.0.15"}
+      {:pow, "~> 1.0.15"},
+      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false}
     ]
   end
 end

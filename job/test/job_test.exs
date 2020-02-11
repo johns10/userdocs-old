@@ -29,7 +29,6 @@ defmodule JobTest do
   test "Job Builder builds tasks" do
     Job.Builder.build(:test, %{ job_type: :annotate, page: :test_page })
     State.get(:task, [])
-    #|> IO.inspect()
   end
 
   test "Job Executor executes job" do

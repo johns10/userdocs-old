@@ -14,24 +14,19 @@ defmodule Graphql.Helpers do
   end
 
   def get( %{ ids: ids }, type) do
-    #IO.inspect(args)
     result = State.get(type, string_list_to_tuple(ids), [])
-    |> IO.inspect()
     |> Enum.map(&state_to_graphql(&1))
     { :ok, result }
   end
 
   def get( %{ id: id }, type) do
-    IO.inspect(id)
     result = State.get(type, [String.to_atom(id)], [])
-    |> IO.inspect
     |> Enum.at(0)
     |> state_to_graphql()
     { :ok, result }
   end
 
   def get(args, type) do
-    IO.inspect(args)
     { :ok, %{ id: "Test"} }
   end
 

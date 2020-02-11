@@ -4,7 +4,6 @@ defmodule StateHandlers.Handle do
 
   def get(state, type, ids \\ []) do
     #IO.puts("Getting Data of type #{type} with ids:")
-    #IO.inspect(ids)
     Helpers.get_data_type({ state }, type)
     |> Helpers.get_by_ids(ids)
   end
@@ -36,7 +35,6 @@ defmodule StateHandlers.Handle do
 
   def create(state, type, id, object) do
     #IO.puts("Creating Object")
-    #IO.inspect(object)
     state
     |> Map.pop(type)
     |> Helpers.create_object(id, object)

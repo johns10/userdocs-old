@@ -29,7 +29,6 @@ defmodule Graphql.StepType.StepTypeResolver do
   end
 
   def args(parent, _args, _info) do
-    IO.inspect(parent)
     { :ok, %{ id: "test" }}
   end
 
