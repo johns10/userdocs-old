@@ -4,6 +4,12 @@ defmodule Userdocs.Project.Domain do
 
   alias Userdocs.Helpers
 
+  def set_default_project(assigns) do
+    Logger.debug("Setting Default Project")
+    project = Enum.at(assigns.project, 0)
+    set_current_project(assigns, project.id)
+  end
+
   def set_current_project(assigns, id) do
     Logger.debug("Setting Current Project")
     {assigns, objects} = StateHandlers.get(assigns, :project, [id])
@@ -20,10 +26,7 @@ defmodule Userdocs.Project.Domain do
 
   def set_default_project_version(assigns) do
     Logger.debug("Setting id-less Default Project Version")
-    Logger.debug(inspect(assigns.current_project_id))
-    id = Helpers.get_id(assigns.current_project_id)
-    Logger.debug(id)
-    set_default_project_version(assigns, id)
+    set_default_project_version(assigns, assigns.current_project_id)
   end
   def set_default_project_version(assigns, project_id) do
     Logger.debug("Setting Default Project Version")

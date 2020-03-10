@@ -12,6 +12,7 @@ defmodule Storage.Step do
     field :order,           :integer
     #field :args,            :map
 
+    field :element_id,      :integer
     field :version_id,      :integer
     field :annotation_id,   :integer
     field :step_type_id,    :integer
@@ -22,6 +23,7 @@ defmodule Storage.Step do
     belongs_to :annotation, Storage.Annotation, foreign_key: :id, references: :annotation_id, define_field: false
     belongs_to :step_type,  Storage.StepType,   foreign_key: :id, references: :step_type_id, define_field: false
     belongs_to :page,       Storage.Page,       foreign_key: :id, references: :page_id, define_field: false
+    belongs_to :element,    Storage.Element,    foreign_key: :id, references: :element_id, define_field: false
 
     embeds_many :args,      Storage.Arg
   end

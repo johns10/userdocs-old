@@ -32,7 +32,7 @@ defmodule State.State do
       %Storage.Project{
         id:           1,
         storage_status: "state",
-        record_status:  "active",
+        record_status:  "existing",
         name:         "Test Project",
         base_url:     "http://webdriveruniversity.com/",
         project_type: "Web",
@@ -41,7 +41,7 @@ defmodule State.State do
       %Storage.Project{
         id:           2,
         storage_status: "state",
-        record_status:  "active",
+        record_status:  "existing",
         name:         "FunnelCloud Staging",
         base_url:     "https://staging.app.funnelcloud.io",
         project_type: "Web",
@@ -54,36 +54,42 @@ defmodule State.State do
         name:    "1.0",
         project_id: 1,
         storage_status: "state",
-        record_status:  "active"
+        record_status:  "existing"
       },
       %Storage.Version{
         id:         2,
         name:    "1.1",
         project_id: 1,
         storage_status: "state",
-        record_status:  "active"
+        record_status:  "existing"
       },
       %Storage.Version{
         id:         3,
         name:    "1.3",
         project_id: 2,
         storage_status: "state",
-        record_status:  "active"
+        record_status:  "existing"
       }
     ],
     page: [
       %Storage.Page{
         id:         1,
+        storage_status: "state",
+        record_status:  "existing",
         url:        "https://varvy.com/pagespeed/wicked-fast.html",
         version_id: 1
       },
       %Storage.Page{
         id:         2,
+        storage_status: "state",
+        record_status:  "existing",
         url:        "https://staging.app.funnelcloud.io/#/plant/All/overview/at-a-glance",
         version_id: 2
       },
       %Storage.Page{
         id:         3,
+        storage_status: "state",
+        record_status:  "existing",
         url:        "https://staging.app.funnelcloud.io/#/machines/1",
         version_id: 2
       },
@@ -102,23 +108,46 @@ defmodule State.State do
       %Storage.StepType{
         id: 3,
         name: "Wait",
-        args: ["strategy", "selector"]
+        args: ["element"]
       },
       %Storage.StepType{
         id: 4,
         name: "Click",
-        args: ["strategy", "selector"]
+        args: ["element"]
       },
       %Storage.StepType{
         id: 5,
         name: "Fill Field",
-        args: ["strategy", "selector", "text"]
+        args: ["element", "text"]
       },
       %Storage.StepType{
         id: 6,
-        name: "Javascript",
-        args: ["procedure", "types", "text"]
+        name: "Apply Annotation",
+        args: [ "element", "annotation_type" ]
       }
+    ],
+    element: [
+      %Storage.Element{
+        id:             1,
+        storage_status:  "state",
+        record_status:  "existing",
+        name: "Google Guidelines",
+        strategy: "xpath",
+        selector: ~s|//div[@id='menu']/ul//a[@href='/']|,
+        page_id: 1,
+        page: nil
+      },
+      %Storage.Element{
+        id:             2,
+        storage_status:  "state",
+        record_status:  "existing",
+        name: "Something Fast",
+        strategy: "xpath",
+        selector: ~s|//div[@id='menu']/ul//a[@href='/']|,
+        page_id: 1,
+        page: nil
+      }
+
     ],
     step: [
       %Storage.Step{
@@ -133,7 +162,7 @@ defmodule State.State do
           },
         ],
         step_type:      nil,
-        step_type_id:   1,
+        step_type_id:   2,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -149,16 +178,12 @@ defmodule State.State do
         order:          2,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[1]|,
+            key: "element",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   2,
+        step_type_id:   3,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -173,16 +198,12 @@ defmodule State.State do
         order:          3,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Next')]|,
+            key: "element",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   3,
+        step_type_id:   4,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -197,16 +218,12 @@ defmodule State.State do
         order:          4,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//div[@class='modal-container']/div/div[@class='content']/div/div[1]/div[3]|,
+            key: "element",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   2,
+        step_type_id:   5,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -221,16 +238,16 @@ defmodule State.State do
         order:          5,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
+            key: "element",
+            value: 1,
           },
           %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//div[@class='modal-container']/div/div[@class='content']/div/div[1]/div[3]|,
+            key: "annotation",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   3,
+        step_type_id:   6,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -245,16 +262,12 @@ defmodule State.State do
         order:          6,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Next Page')]|,
+            key: "element",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   2,
+        step_type_id:   3,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -269,16 +282,16 @@ defmodule State.State do
         order:          7,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
+            key: "element",
+            value: 1,
           },
           %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Next Page')]|
+            key: "annotation",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   3,
+        step_type_id:   6,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -293,16 +306,12 @@ defmodule State.State do
         order:          8,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Save')]|,
+            key: "element",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   2,
+        step_type_id:   3,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -317,16 +326,12 @@ defmodule State.State do
         order:          9,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//button[contains(.,'Save')]|
+            key: "element",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   3,
+        step_type_id:   4,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -348,7 +353,7 @@ defmodule State.State do
           },
         ],
         step_type:      nil,
-        step_type_id:   1,
+        step_type_id:   2,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -363,16 +368,12 @@ defmodule State.State do
         order:          11,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//input[@placeholder='Username']|,
+            key: "element",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   2,
+        step_type_id:   3,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -387,12 +388,8 @@ defmodule State.State do
         order:          12,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//input[@placeholder='Username']|,
+            key: "element",
+            value: 1,
           },
           %Storage.Arg{
             key:      "text",
@@ -400,7 +397,7 @@ defmodule State.State do
           },
         ],
         step_type:      nil,
-        step_type_id:   4,
+        step_type_id:   5,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -415,12 +412,8 @@ defmodule State.State do
         order:          13,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]/div//form//input[@placeholder='Password']|,
+            key: "element",
+            value: 1,
           },
           %Storage.Arg{
             key:      "text",
@@ -428,7 +421,7 @@ defmodule State.State do
           },
         ],
         step_type:      nil,
-        step_type_id:   4,
+        step_type_id:   5,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -443,16 +436,12 @@ defmodule State.State do
         order:          14,
         args: [
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|/html/body/div[@class='ember-view']/div[9]//form//button|,
+            key: "element",
+            value: 1,
           },
         ],
         step_type:      nil,
-        step_type_id:   3,
+        step_type_id:   4,
         version:        nil,
         version_id:     1,
         page:           nil,
@@ -471,7 +460,7 @@ defmodule State.State do
             value:    "https://varvy.com/pagespeed/wicked-fast.html",
           },
         ],
-        step_type_id:   1,
+        step_type_id:   2,
         version_id:     nil,
         page_id:        3,
         annotation_id:  nil
@@ -485,7 +474,7 @@ defmodule State.State do
         args: %{
 
         },
-        step_type_id:   5,
+        step_type_id:   6,
         version_id:     nil,
         page_id:        3,
         annotation_id:  nil
@@ -495,158 +484,114 @@ defmodule State.State do
         storage_status:  "state",
         record_status:  "existing",
         order:        1,
+        step_type_id:   2,
+        version_id:     nil,
+        page_id:        1,
+        annotation_id:  nil,
         args: [
           %Storage.Arg{
             key:      "url",
             value:    "https://varvy.com/pagespeed/wicked-fast.html",
           },
         ],
-        step_type_id:   1,
-        version_id:     nil,
-        page_id:        1,
-        annotation_id:  nil
       },
       %Storage.Step{
         id:           21,
         storage_status:  "state",
         record_status:  "existing",
         order:        2,
-        args: [
-          %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|//div[@id='menu']/ul//a[@href='/']|
-          },
-        ],
-        step_type_id:   2,
+        step_type_id:   3,
         version_id:     nil,
         page_id:        1,
-        annotation_id:  nil
+        annotation_id:  nil,
+        args: [
+          %Storage.Arg{
+            key: "element",
+            value: 1,
+          }
+        ],
       },
       %Storage.Step{
         id:             22,
         storage_status:  "state",
         record_status:  "existing",
         order:          3,
-        args: [
-          %Storage.Arg{
-            key:      "script_type",
-            value:    "badge",
-          },
-          %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|//div[@id='menu']/ul//a[@href='/']|,
-          },
-          %Storage.Arg{
-            key:      "size",
-            value:    15,
-          },
-          %Storage.Arg{
-            key:      "label",
-            value:    "1",
-          },
-          %Storage.Arg{
-            key:      "color",
-            value:    "red"
-          },
-        ],
-        step_type_id:   5,
+        step_type_id:   6,
         version_id:     nil,
         page_id:        1,
-        annotation_id:  1
+        annotation_id:  nil,
+        args: [
+          %Storage.Arg{
+            key: "element",
+            value: 1,
+          },
+          %Storage.Arg{
+            key: "annotation",
+            value: 1,
+          },
+        ],
       },
       %Storage.Step{
         id:             23,
         storage_status:  "state",
         record_status:  "existing",
         order:          4,
-        args: [
-          %Storage.Arg{
-            key:      "script_type",
-            value:    "outline",
-          },
-          %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|//div[@id='menu']/ul//a[@href='/']|,
-          },
-          %Storage.Arg{
-            key:      "thickness",
-            value:    3,
-          },
-          %Storage.Arg{
-            key:      "color",
-            value:    "red"
-          },
-        ],
-        step_type_id:   5,
+        step_type_id:   6,
         version_id:     nil,
         page_id:        1,
-        annotation_id:  1
+        annotation_id:  nil,
+        args: [
+          %Storage.Arg{
+            key: "element",
+            value: 1,
+          },
+          %Storage.Arg{
+            key: "annotation",
+            value: 1,
+          },
+        ],
       },
       %Storage.Step{
         id:             24,
         storage_status:  "state",
         record_status:  "existing",
         order:          5,
+        step_type_id:   6,
+        version_id:     nil,
+        page_id:        1,
+        annotation_id:  nil,
         args: [
+          %Storage.Arg{
+            key: "element",
+            value: 1,
+          },
           %Storage.Arg{
             key:      "script_type",
             value:    "badge",
           },
           %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|//div[@id='menu']/ul//a[@href='/pagespeed/']|,
-          },
-          %Storage.Arg{
-            key:      "size",
-            value:    15,
-          },
-          %Storage.Arg{
-            key:      "label",
-            value:    "1",
-          },
-          %Storage.Arg{
-            key:      "color",
-            value:    "red"
+            key: "annotation",
+            value: 1,
           },
         ],
-        step_type_id:   5,
-        version_id:     nil,
-        page_id:        1,
-        annotation_id:  2
       },
       %Storage.Step{
         id:             25,
         storage_status:  "state",
         record_status:  "existing",
         order:          6,
+        step_type_id:   6,
+        version_id:     nil,
+        page_id:        1,
+        annotation_id:  nil,
         args: [
+          %Storage.Arg{
+            key: "element",
+            value: 1,
+          },
           %Storage.Arg{
             key:      "script_type",
             value:    "outline",
-          },
-          %Storage.Arg{
-            key:      "strategy",
-            value:    "xpath",
-          },
-          %Storage.Arg{
-            key:      "selector",
-            value:    ~s|//div[@id='menu']/ul//a[@href='/pagespeed/']|,
           },
           %Storage.Arg{
             key:      "thickness",
@@ -657,10 +602,6 @@ defmodule State.State do
             value:    "red"
           },
         ],
-        step_type_id:   5,
-        version_id:     nil,
-        page_id:        1,
-        annotation_id:  2
       },
     ],
     script: %{
@@ -753,7 +694,8 @@ defmodule State.State do
         label:              "1",
         description:        "This is the google guidelines.",
         annotation_type_id: 1,
-        page_id:            1
+        page_id:            1,
+        content_id:         1
       },
       %Storage.Annotation{
         id:                 2,
@@ -761,7 +703,26 @@ defmodule State.State do
         description:        "This is the page speed.",
         label:              "2",
         annotation_type_id: 2,
-        page_id:            1
+        page_id:            1,
+        content_id:         2
+      }
+    ],
+    content: [
+      %Storage.Content{
+        id: 1,
+        storage_status: "state",
+        record_status:  "existing",
+        name:           "Google Guidelines",
+        description:    "This is the google guidelines.",
+        team_id:      1
+      },
+      %Storage.Content{
+        id: 2,
+        storage_status: "state",
+        record_status:  "existing",
+        name:           "Page Speed",
+        description:    "This is the page speed.",
+        team_id:      1
       }
     ],
     job: %{
@@ -775,10 +736,8 @@ defmodule State.State do
   end
 
   def create(state, type, object) do
-    IO.puts("Creating Object")
     object = Map.put(object, :storage_status, "state")
     object = Map.put(object, :record_status, "existing")
-
     StateHandlers.create(state, type, object)
     |> live_broadcast(:create, type)
   end
@@ -826,79 +785,4 @@ defmodule State.State do
       }
     )
   end
-
-  """
-  def get_reverse_relationship(state, { id_from, object_from }, related_type) do
-    #IO.puts("Getting reverse relationship from {object_from.type}: {id_from} to {related_type}")
-    { _state, related } = get(state, related_type)
-    Enum.reduce(
-      related,
-      %{},
-      fn { id, object }, objects ->
-        #IO.puts("Processing related object {object.type}: {id} to {object[object_from.type]}")
-        try do
-          ^id_from = object[object_from.type]
-          Map.put(objects, id, object)
-        rescue
-          MatchError -> objects
-        end
-      end
-    )
-  end
-
-  def get_forward_ids(state, { id_from, object_from }, related_type) do
-    #IO.puts("Getting forward id from {object_from.type}: {id_from} to {related_type}")
-    { _state, related } = get(state, related_type)
-    Enum.reduce(
-      related,
-      Map.put(object_from, related_type, []),
-      fn { id, object }, updated_object ->
-        #IO.puts("Processing related object from {object[object_from.type]}: id_from to {object.type}: {id}")
-        try do
-          ^id_from = object[object_from.type]
-          Map.put(updated_object, related_type, [ id | updated_object[related_type] ])
-        rescue
-          MatchError -> updated_object
-        end
-      end
-    )
-  end
-
-Temporarily disabled because gql doesnt need
-  def get_relationships({ state, data, [] }) do
-    { state, data }
-  end
-  def get_relationships({ state, data, includes }) do
-    #IO.puts("Getting Relationships")
-    {
-      state,
-      Enum.map(
-        data,
-        fn {key, object} ->
-          { key, %{
-            attributes: object.attributes,
-            type: object.type,
-            relationships: Enum.map(
-              object.relationships,
-              fn {type, related_ids} ->
-                updated_relationship = get_relationship_data(state, type, related_ids, Enum.member?(includes, type))
-                {type, updated_relationship}
-              end
-            )
-          }}
-        end
-      )
-    }
-  end
-
-  def get_relationship_data(state, type, related_ids, true) do
-    #IO.puts("Getting relationship data")
-    { _state, result } = get(state, type, related_ids, [])
-    result
-  end
-
-  def get_relationship_data(_state, _type, related_ids, false) do
-    related_ids
-  end
-"""
 end

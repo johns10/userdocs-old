@@ -40,7 +40,6 @@ defmodule LiveViewWeb.Data do
   end
   def edit(socket = %Phoenix.LiveView.Socket{}, data, type, changeset, id) do
     Logger.debug("It has a changeset, so it returns that one")
-    Logger.debug(inspect(changeset))
     { socket, changeset }
   end
 

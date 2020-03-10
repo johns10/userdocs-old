@@ -24,9 +24,6 @@ defmodule LiveViewWeb.Changeset do
   end
   def assign_changeset({socket, changeset}, type, id) do
     Logger.debug("It assigns the #{type} Changeset specified by the id: #{id}")
-    Logger.debug(inspect(changeset))
-    Logger.debug(type)
-    Logger.debug(inspect(socket))
 
     new_changesets =
       socket.assigns.changesets[type]
@@ -71,7 +68,6 @@ defmodule LiveViewWeb.Changeset do
     assign_changeset({ socket, changeset }, type)
   end
   def handle_changeset_result({ socket, { :ok, object } }, type) do
-    Logger.debug(inspect(object))
     action = Helpers.object_action(object)
     Helpers.apply_state_change(object, String.to_atom(type), action)
     socket

@@ -57,7 +57,6 @@ defmodule Userdocs.Version do
       assigns.changesets.version[id].changes.storage_status
 
     changesets = assigns.changesets.version
-    Logger.debug(inspect(changesets))
 
     assigns =
       Data.remove(:version, storage_status, id, assigns)
@@ -80,6 +79,7 @@ defmodule Userdocs.Version do
   end
 
   def toggle_dropdown(assigns) do
+    Logger.debug("Toggling dropdown")
     status = not assigns.ui.version_menu.toggled
     Kernel.put_in(assigns, [:ui, :version_menu, :toggled], status)
   end

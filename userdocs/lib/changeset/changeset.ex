@@ -22,9 +22,9 @@ defmodule Userdocs.Changeset do
 
     storage_module = String.to_atom(
       "Elixir.Storage." <> Macro.camelize(type_name))
-    liveview_module = String.to_atom(
+    userdocs_module = String.to_atom(
       "Elixir.Userdocs." <> Macro.camelize(type_name) <> ".Constants")
-    associations = apply(liveview_module, :associations, [assigns])
+    associations = apply(userdocs_module, :associations, [assigns])
     object_struct = Kernel.struct(storage_module, %{})
 
     changeset = apply(
@@ -33,6 +33,8 @@ defmodule Userdocs.Changeset do
       [object_struct, object, associations])
 
     result = Ecto.Changeset.apply_action(changeset, action)
+
+    Logger.debug("Finished Applying changeet")
 
     { assigns, result, changeset }
   end

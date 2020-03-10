@@ -133,8 +133,6 @@ defmodule LiveViewWeb.Types.Step do
       Map.get(socket, :assigns)
       |> Kernel.put_in([:changesets, "new-project-steps"], new_project_changesets)
 
-    Logger.debug(inspect(assigns.changesets["new-project-steps"]))
-
     assign(socket, assigns)
   end
 

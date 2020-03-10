@@ -8,30 +8,25 @@ defmodule LiveViewWeb.StepView do
 
   def render(changeset, step, assigns, :empty_header_form) do
     ~L"""
-    <li class="list-group-item">
-      <%= render(changeset, assigns, :empty_header) %>
-      <%= render(changeset, step, assigns, :form) %>
-    </li>
+    <%= render(changeset, assigns, :empty_header) %>
+    <%= render(changeset, step, assigns, :form) %>
     """
   end
 
-  def render(step, assigns, :header_only, action) do
+  def render(step, assigns, parent_type, parent_id, :header_only, action) do
     ~L"""
-    <li class="list-group-item">
-      <%= render(step, assigns, :header, action) %>
-    </li>
+    <%= LiveViewWeb.Step.Header.render(step, assigns, action, parent_type, parent_id) %>
     """
   end
 
-  def render(step, assigns, :header_form, action) do
-    render(%{ id: nil }, step, assigns, :header_form, action)
+  def render(step, assigns, :header_form, action, parent_type, parent_id) do
+    render(%{ id: nil }, step, assigns, :header_form, action, parent_type, parent_id)
   end
-  def render(changeset, step, assigns, :header_form, action) do
+
+  def render(changeset, step, assigns, :header_form, action, parent_type, parent_id) do
     ~L"""
-    <li class="list-group-item">
-      <%= render(step, assigns, :header, action) %>
-      <%= render(changeset, step, assigns, :form) %>
-    </li>
+    <%= LiveViewWeb.Step.Header.render(step, assigns, action, parent_type, parent_id) %>
+    <%= render(changeset, step, assigns, :form) %>
     """
   end
 
@@ -55,42 +50,6 @@ defmodule LiveViewWeb.StepView do
           %>
           <%= changeset.params["storage_status"]  %>
           <%= changeset.params["record_status"]  %>
-        </div>
-      </nav>
-    </div>
-    """
-  end
-
-  def render(step, assigns, :header, action) do
-    ~L"""
-    <div
-      href="#"
-      phx-hook="drop_zone"
-      phx-click="<%= action %>"
-      phx-value-step-id="<%= step.id %>"
-    >
-      <nav
-        class="navbar bg-light"
-        style="margin-top: -12px; margin-bottom: -12px; margin-left: -20px; margin-right: -20px"
-      >
-        <div class="d-flex justify-content-start">
-          <%= step.order %>:
-          <%= step.id %>:
-          <%= Enum.find(@step_type, nil, fn (o) -> o.id == step.step_type_id end) |> Map.get(:name) %>
-          <%= step.storage_status %>
-          <%= step.record_status %>
-        </div>
-        <div class="d-flex justify-content-end">
-          <i
-            class="fa fa-edit"
-            parent-type="version"
-            parent-id="<%= step.version_id %>"
-            type="step"
-            id="<%= step.id %>"
-            phx-hook="draggable_hook"
-            phx-debounce="blur"
-            draggable="true"
-          ></i>
         </div>
       </nav>
     </div>
@@ -155,16 +114,12 @@ defmodule LiveViewWeb.StepView do
 
   def render(parent_id, assigns, :new_step_button) do
     ~L"""
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-around bd-highlight">
-          <div class="p-2 bd-highlight">
-            <%= InputHelpers.button_new("step", parent_id,
-              LiveViewWeb.Version.current(assigns) == nil) %>
-          </div>
+      <div class="d-flex justify-content-around bd-highlight">
+        <div class="p-2 bd-highlight">
+          <%= InputHelpers.button_new("step", parent_id,
+            LiveViewWeb.Version.current(assigns) == nil) %>
         </div>
       </div>
-    </div>
     """
   end
 

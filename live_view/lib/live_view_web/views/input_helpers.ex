@@ -6,6 +6,7 @@ defmodule LiveViewWeb.InputHelpers do
   def input(form, field, opts \\ []) do
     type = opts[:using] || Phoenix.HTML.Form.input_type(form, field)
     placeholder = opts[:placeholder] || Phoenix.HTML.Form.input_type(form, field)
+    select_opts = opts[:select_options] || Phoenix.HTML.Form.input_type(form, field)
 
     wrapper_opts = [class: "form-group"]
     label_opts = [class: "control-label"]
@@ -18,7 +19,11 @@ defmodule LiveViewWeb.InputHelpers do
 
     content_tag :div, wrapper_opts do
       label = label(form, field, humanize(field), label_opts)
-      input = input(type, form, field, input_opts)
+      input = if (type == :select) do
+        input(type, form, field, select_opts, input_opts)
+      else
+        input(type, form, field, input_opts)
+      end
       error = LiveViewWeb.ErrorHelpers.error_tag(form, field)
       help = content_tag(:small, help_text(form, field))
       [label, input, error, help || ""]
@@ -38,7 +43,7 @@ defmodule LiveViewWeb.InputHelpers do
     )
   end
 
-  def button_save(form) do
+  def button_save(form, label \\ "Save") do
     { button_style, icon_class } = cond do
       Enum.count(form.source.errors) >= 1 ->
         {
@@ -53,33 +58,47 @@ defmodule LiveViewWeb.InputHelpers do
       true -> true
     end
     submit = submit(
-      [ content_tag(:i, "", class: icon_class), " Save" ],
+      [ content_tag(:i, "", class: icon_class), " " <> label ],
       class: "btn btn-success",
       value: "save",
       style: button_style
     )
   end
 
-  def button_remove(type, id) do
+  def button_remove(type, id, label \\ "Remove") do
     content_tag(
       :button,
-      "Remove",
-      type: "button",
-      phx_click: type <> "::remove",
-      class: "btn btn-danger",
-      phx_value_id: id
-    )
+      [
+        type: "button",
+        phx_click: type <> "::remove",
+        class: "btn btn-danger",
+        phx_value_id: id
+      ]
+    ) do
+      [
+        content_tag(:i, "", class: "fa fa-times"),
+        " " <> label
+        ||""
+      ]
+    end
   end
 
-  def button_cancel(type, id) do
+  def button_cancel(type, id, label \\ "Cancel") do
     content_tag(
       :button,
-      "Cancel",
-      type: "button",
-      phx_click: type <> "::cancel",
-      class: "btn btn-secondary",
-      phx_value_id: id
-    )
+      [
+        type: "button",
+        phx_click: type <> "::cancel",
+        class: "btn btn-secondary",
+        phx_value_id: id
+      ]
+    ) do
+      [
+        content_tag(:i, "", class: "fa fa-arrow-left"),
+        " " <> label
+        || ""
+      ]
+    end
   end
 
   defp state_class(form, field) do
@@ -96,10 +115,11 @@ defmodule LiveViewWeb.InputHelpers do
   #   raise "not yet implemented"
   # end
 
-  defp help_text(form, field) do
+  def help_text(form, field) do
     help_message = Map.get(
       %{
         name: "Enter a descriptive name.",
+        url: "Enter the base URL for this project, for example: https://www.google.com",
         base_url: "Enter the base URL for this project, for example: https://www.google.com",
         project_type: "Enter your project type"
       },
@@ -123,5 +143,9 @@ defmodule LiveViewWeb.InputHelpers do
 
   defp input(type, form, field, input_opts) do
     apply(Phoenix.HTML.Form, type, [form, field, input_opts])
+  end
+
+  defp input(:select, form, field, select_opts, input_opts) do
+    apply(Phoenix.HTML.Form, :select, [form, field, select_opts, input_opts])
   end
 end

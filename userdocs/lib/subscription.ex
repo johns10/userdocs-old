@@ -10,10 +10,11 @@ defmodule Userdocs.Subscription do
     { assigns, object } = preprocess(
       type, command, object, assigns)
 
-    Subscription.Handler.handle( type, command, object, assigns)
+    assigns
   end
 
-  def preprocess(:step, :update, object, assigns) do
+  def preprocess(type = :step, :update, object, assigns) do
+    { assigns, data } = StateHandlers.update(assigns, type, object)
     { assigns, object }
   end
   def preprocess(type, :update, object, assigns) do
@@ -33,6 +34,13 @@ defmodule Userdocs.Subscription do
     assigns = Kernel.put_in(assigns,
       [ :changesets, type, object.id ], changeset)
 
+    { assigns, data } = StateHandlers.update(assigns, type, object)
+    { assigns, object }
+  end
+  def preprocess(type, :create, object, assigns) do
+    Logger.debug("Handling a preprocessor for creating an #{type}")
+    Logger.debug(object.id)
+    { assigns, data } = StateHandlers.update(assigns, type, object)
     { assigns, object }
   end
   def preprocess(type, command, object, assigns) do

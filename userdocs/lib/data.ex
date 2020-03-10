@@ -41,14 +41,10 @@ defmodule Userdocs.Data do
   def edit(assigns, type, nil, id) do
     Logger.debug("It gets the object, and returns its changeset")
     object = get_one(assigns, type, id)
-    Logger.debug(id)
-    Logger.debug(type)
-    Logger.debug(inspect(object))
     Changeset.new(assigns, Map.from_struct(object), type)
   end
   def edit(_assigns, type, changeset, id) do
     Logger.debug("It has a changeset, so it returns that one")
-    Logger.debug(inspect(changeset))
     changeset
   end
 
@@ -74,6 +70,61 @@ defmodule Userdocs.Data do
     result
     |> Enum.reduce(1, &max(&1.order, &2))
     |> Kernel.+(1)
+  end
+
+  def move(items, from, to) when Kernel.abs(from - to) > 1 do
+    args = move_down(from, to)
+    Enum.map(
+      items,
+      fn(x) ->
+        in_bounds = ((x.order >= args.min) && (x.order <= args.max))
+        case { args.min, args.max, x.order } do
+          { min, max, order } when in_bounds == true ->
+            Map.put(x, :order, x.order + args.adjustment)
+          { _min, _max, order } when order == from ->
+            Map.put(x, :order, to)
+          _ -> x
+        end
+      end
+    )
+  end
+  def move(items, from, to) when Kernel.abs(from - to) == 1 do
+    Logger.debug("Moving to an adjacent item")
+    Enum.reduce(
+      items,
+      [],
+      fn(i, acc) ->
+        case { from, to, i.order } do
+          { from, _to, order } when order == from ->
+            acc = [ Map.put(i, :order, to) | acc ]
+          { _from, to, order } when order == to  ->
+            acc = [ Map.put(i, :order, from) | acc ]
+          _ -> acc
+        end
+      end
+    )
+  end
+  def move(items, from, to) when Kernel.abs(from - to) == 0 do
+    Logger.debug("Moving to the same item")
+    []
+  end
+
+  def move_down(source_order, target_order)
+  when source_order < target_order == true do
+    %{
+      min: source_order + 1,
+      max: target_order,
+      adjustment: -1
+    }
+  end
+
+  def move_down(source_order, target_order)
+  when source_order < target_order == false do
+    %{
+      min: target_order,
+      max: source_order - 1,
+      adjustment: 1
+    }
   end
 
   def new_struct(assigns, type, function_name \\ :new_map) do
@@ -165,103 +216,128 @@ defmodule Userdocs.Data do
     Changeset.handle_changeset_result({ assigns, result }, type)
   end
 
-  def reorder_start(assigns, data, key) do
-    assigns = Map.put(assigns, key, data)
+  def select(assigns, type, action) do
+    list = Map.get(assigns, type)
+    select(list, action)
   end
 
-  def reorder_drag(assigns, data, id) do
-    data = assigns.drag
-    Logger.debug(inspect(assigns.drag))
-    target = Helpers.get_one(assigns, :step, id)
-    source = Helpers.get_one(assigns, :step,
-      Helpers.get_id(data["source-id"]))
-    parent = Helpers.get_one(assigns, :version,
-      Helpers.get_id(data["parent-id"]))
-
-    { assigns, steps } = StateHandlers.get_related(
-      assigns, :version_id, [ parent ], :step)
-
-    Logger.debug("Moving id: #{source.id}, order: #{source.order}")
-    Logger.debug("       to: #{target.id}, order: #{target.order}")
-
-    reordered_steps = Helpers.move(steps, source.order, target.order)
-
-    Logger.debug(inspect(target.id))
-    #data = Map.put(data, "source-id", Integer.to_string(target.id))
-    Logger.debug(inspect(data))
-
-    #socket = put_in_socket(socket, [ :drag ], data)
-
-    assigns = update_order_assigns({ assigns, :step, reordered_steps })
+  def select(list, action) do
+    list
+    |> Enum.map(fn(o) -> [
+      {:key, o.name},
+      {:value, o.id},
+      {:phx_click, action}
+    ]  end)
   end
 
-  def update_order_assigns({ socket, type, objects }) do
-    Logger.debug("It inserts records with updated order into the socket")
+  def update_order_assigns(assigns, type, objects) do
+    Logger.debug("It inserts records with updated order into the assigns")
     Enum.reduce(
       objects,
-      socket.assigns,
-      fn(o, acc) ->
+      assigns,
+      fn(o, old_assigns) ->
         object =
-          socket
+          old_assigns
           |> Data.get_one(type, o.id)
           |> Map.put(:order, o.order)
 
-        { assigns, _result } = StateHandlers.update(acc, type, object)
+        { assigns, _result } = StateHandlers.update(old_assigns, type, object)
         assigns
       end
     )
   end
 
+  def update_order_state(assigns, type, objects) do
+    Logger.debug("It inserts records with updated order into the state")
+    Enum.each(
+      objects,
+      fn(o) ->
+        object =
+          assigns
+          |> Data.get_one(type, o.id)
+          |> Map.put(:order, o.order)
+
+        State.update(type, object)
+      end
+    )
+    assigns
+  end
+
+  def new_form() do
+    %{
+      mode: :new
+    }
+  end
+
+  def new_page_step_form() do
+    %{
+      mode: :new
+    }
+  end
+
+  def new_page_element_form() do
+    %{
+      mode: :new
+    }
+  end
+
   def new_state() do
     %{
+      current_team_id: nil,
       current_project_id: nil,
       current_version_id: nil,
       show_removed_projects: true,
       active_steps: [],
       active_pages: [],
+      active_elements: [],
+      active_annotations: [],
+      active_page_elements: [],
+      active_page_annotations: [],
+      active_content: [],
+      page_edit: [],
       drag: %{},
       changesets: %{
-        "annotation" => %{},
-        "new-project-steps" => %{},
-        "new-page-step" => %{},
+        page: %{},
         step: %{},
         version: %{},
         project: %{},
+        element: %{},
+        annotation: %{},
+        content: %{},
       },
       current_changesets: %{
-        "new-version-pages" => %{},
+        new_version_pages: %{},
         new_version_steps: %{},
         new_project_versions: %{},
         new_project: nil,
+        new_page_elements: %{},
+        new_content: nil
       },
       active_annotations: [],
       ui: %{
-        "project-steps-menu" => %{
-          "expanded" => "true",
-          "update-step-menu" => "false",
-          "update-step" => nil,
-          "new-step-menu" => "false",
-          "toggled" => false,
-          "mode" => :new,
-          "active" => [],
-          "editable" => [nil],
-          class: %{
-            collapse: "collapse show"
-          }
+
+        page_dropdown: %{
+          active: nil,
         },
-        "page-menu" => %{
-          "toggled" => false,
-          "active-pages" => [],
-          "active-steps" => [],
-          "active-annotations" => [],
-          "new-step-changesets" => %{},
-          "new-annotations" => %{},
-          "form-modes" => %{}
+
+        project_menu: %{
+          toggled: false
         },
-        project_step_form: %{
+        project_form: %{
           toggled: false,
+          mode: :new,
           new: nil
         },
+
+        content_menu: %{
+          toggled: false
+        },
+        content_form: %{
+          toggled: false,
+          mode: :button,
+          new: nil
+        },
+
         version_menu: %{
           toggled: false
         },
@@ -270,13 +346,32 @@ defmodule Userdocs.Data do
           mode: :new,
           new: nil
         },
-        project_menu: %{
+        version_page_control: %{
+          mode: :button,
+        },
+        version_page_menu: %{
           toggled: false
         },
-        project_form: %{
+        version_step_form: %{
           toggled: false,
-          mode: :new,
           new: nil
+        },
+        project_steps_menu: %{
+          toggled: false,
+          class: %{
+
+            collapse: "collapse show"
+          }
+        },
+
+
+        version_page_form: %{
+        },
+        page_element_forms: %{
+        },
+        page_step_forms: %{
+        },
+        page_annotation_forms: %{
         },
       }
     }

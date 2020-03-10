@@ -316,7 +316,8 @@ def move(items, from, to) when Kernel.abs(from - to) > 1 do
 
   def insert_state({ socket, args }) do
     Logger.debug("It inserts a record with order #{args.source.order} into the state")
-    Enum.each(args.result, fn(o) -> _result = State.update(args.child_type, o) end)
+    Enum.each(args.result,
+      fn(o) -> _result = State.update(args.child_type, o) end)
 
     updated_child = Map.put(args.source, :order, args.target_position)
     State.update(args.child_type, updated_child)

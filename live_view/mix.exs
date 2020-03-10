@@ -40,6 +40,7 @@ defmodule LiveView.MixProject do
       {:users, path: "../users"},
       {:userdocs, path: "../userdocs"},
       {:phoenix, "~> 1.4.10"},
+      {:poison, "~> 3.1"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},

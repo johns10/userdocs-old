@@ -24,7 +24,6 @@ defmodule LiveViewWeb.Project.Event do
   def handle_event("project::save", %{"project" => project}, socket) do
     Logger.debug("It saves a project")
     project_id = Helpers.form_id(project)
-    Logger.debug(inspect(project))
     assigns = Userdocs.Project.save(socket.assigns, project)
     {:noreply, assign(socket, assigns) }
   end

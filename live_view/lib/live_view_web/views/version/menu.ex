@@ -11,7 +11,7 @@ defmodule LiveViewWeb.Version.Menu do
   def render(assigns) do
     version = Version.current(assigns)
     version_changesets = assigns.changesets["version"]
-    project = Project.current(assigns)
+    project = Userdocs.Project.Constants.current(assigns)
     project_changesets = assigns.changesets["project"]
     ~L"""
     <div>
@@ -33,6 +33,7 @@ defmodule LiveViewWeb.Version.Menu do
         <button
           class="btn btn-secondary dropdown-toggle"
           type="button"
+          id="versionMenuButton"
           data-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
@@ -45,11 +46,11 @@ defmodule LiveViewWeb.Version.Menu do
         </button>
       </div>
       <%= if @ui.version_menu.toggled do %>
-        <div class="dropdown-menu show" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu show" aria-labelledby="versionMenuButton"  x-placement="bottom-start" >
       <%= else %>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu" aria-labelledby="versionMenuButton">
       <%= end %>
-        <%= for version <- Helpers.children(assigns, :project_id, Project.current(assigns), :version) do %>
+        <%= for version <- Helpers.children(assigns, :project_id, Userdocs.Project.Constants.current(assigns), :version) do %>
           <a
             class="dropdown-item"
             href="#"

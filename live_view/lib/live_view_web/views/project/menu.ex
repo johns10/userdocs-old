@@ -8,62 +8,80 @@ defmodule LiveViewWeb.Project.Menu do
   alias LiveViewWeb.Project
 
   def render(assigns) do
-    current_project = Project.current(assigns)
+    current_project = Userdocs.Project.Constants.current(assigns)
     project_changesets = assigns.changesets["project"]
-    ~L"""
-    <div>
-      <div class="btn-group" role="group" aria-label="Basic example">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          phx-click="project::edit"
-          phx-value-id=<%= @current_project_id %>
-        >
-          <i class="fa fa-edit"></i>
-        </button>
-        <button
-          class="btn btn-secondary dropdown-toggle"
-          type="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          <%= if @ui.project_menu.toggled do %>
-            aria-expanded="true"
-          <%= else %>
-            aria-expanded="false"
-          <%= end %>
-          phx-click="project::dropdown_toggle"
-        >
-          <%= current_project.name %>
-        </button>
-      </div>
-      <%= if @ui.project_menu.toggled do %>
-        <div class="dropdown-menu show" aria-labelledby="dropdownMenuButton">
-      <%= else %>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <%= end %>
-        <%= for project <- Enum.filter(@project, fn(p) -> (p.record_status != "removed") || (assigns.show_removed_projects == true) end) do %>
-          <a
-            class="dropdown-item"
-            href="#"
-            phx-click="project::select"
-            phx-value-id=<%= project.id %>
-          >
-            <%= project.name %>
-          </a>
-        <%= end %>
-        <a
-          class="dropdown-item"
-          href="#"
-          phx-click="project::new"
-        >
-          <i class="fa fa-plus"></i>  New Project
-        </a>
-      </div>
-    </div>
-    """
-  end
-
-  def mount(_session, socket) do
-    {:ok, assign(socket, deploy_step: "Ready!")}
+    dropdown_class =
+      if assigns.ui.project_menu.toggled do
+        "dropdown-menu show"
+      else
+        "dropdown-menu"
+      end
+    projects =
+      Enum.filter(
+        assigns.project,
+        fn(p) ->
+          (p.record_status != "removed")
+          || (assigns.show_removed_projects == true)
+        end
+      )
+    content_tag(:div, []) do
+      content_tag(:div, [
+        class: "btn-group",
+        role: "group",
+        aria_label: "Basic example",
+      ]) do
+        [
+          content_tag(:button, [
+            type: "button",
+            class: "btn btn-secondary",
+            phx_click: "project::edit",
+            phx_value_id: assigns.current_project_id
+          ]) do
+            content_tag(:i, [ class: "fa fa-edit" ]) do
+              ""
+            end
+          end,
+          content_tag(:button, [
+            class: "btn btn-secondary dropdown-toggle",
+            type: "button",
+            id: "projectMenuButton",
+            data_toggle: "dropdown",
+            aria_haspopup: "true",
+            aria_expanded: "false",
+            phx_click: "project::dropdown_toggle",
+          ]) do
+            current_project.name
+          end,
+          content_tag(:div, [
+            class: dropdown_class,
+            aria_labelledby: "projectMenuButton"
+          ]) do
+            [
+              for project <- projects do
+                content_tag(:a, [
+                  class: "dropdown-item",
+                  href: "#",
+                  phx_click: "project::select",
+                  phx_value_id: project.id
+                ]) do
+                  project.name
+                end
+              end,
+              content_tag(:a, [
+                class: "dropdown-item",
+                href: "#",
+                phx_click: "project::new",
+              ]) do
+                content_tag(:i, [
+                  class: "fa fa-plus"
+                ]) do
+                  "New Project"
+                end
+              end
+            ]
+          end
+        ]
+      end
+    end
   end
 end

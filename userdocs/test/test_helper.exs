@@ -4,19 +4,44 @@ defmodule TestHelper do
     quote do
       %{
         current_project_id: nil,
+        page_edit: [],
+        active_steps: [],
+        active_pages: [],
+        active_elements: [],
+        active_page_elements: [],
         changesets: %{
           project: %{},
           version: %{},
           step: %{},
+          page: %{},
+          element: %{},
+          content: %{},
+          annotation: %{},
+          content: %{}
         },
         current_changesets: %{
           new_project: nil,
           new_project_versions: %{},
-          new_version_steps: %{}
+          new_version_steps: %{},
+          new_version_pages: %{},
+          new_page_elements: %{},
+          new_page_annotations: %{},
+
         },
         ui: %{
+          content_menu: %{
+            toggled: false
+          },
+          content_form: %{
+            toggled: false,
+            mode: :new,
+            new: nil
+          },
           version_menu: %{
             toggled: false
+          },
+          page_dropdown: %{
+            active: nil,
           },
           version_form: %{
             toggled: false,
@@ -31,10 +56,16 @@ defmodule TestHelper do
             mode: :new,
             new: nil
           },
-          project_step_form: %{
+          version_step_form: %{
             toggled: false,
             new: nil
           },
+          version_page_control: %{
+            mode: :button
+          },
+          page_element_forms: %{
+
+          }
         },
         team: [
           %Storage.Team{
@@ -204,6 +235,16 @@ defmodule TestHelper do
             annotation_id:  nil
           },
         ],
+        annotation_type: [
+          %Storage.AnnotationType{
+            id:   1,
+            name: "Outline"
+          },
+          %Storage.AnnotationType{
+            id:   2,
+            name: "Badge"
+          }
+        ],
         annotation: [
           %Storage.Annotation{
             id:                 1,
@@ -220,6 +261,24 @@ defmodule TestHelper do
             label:              "2",
             annotation_type_id: 2,
             page_id:            1
+          }
+        ],
+        content: [
+          %Storage.Content{
+            id: 1,
+            storage_status: "state",
+            record_status:  "existing",
+            name:           "Google Guidelines",
+            description:    "This is the google guidelines.",
+            team_id:      1
+          },
+          %Storage.Content{
+            id: 2,
+            storage_status: "state",
+            record_status:  "existing",
+            name:           "Page Speed",
+            description:    "This is the page speed.",
+            team_id:      1
           }
         ],
         step_type: [
@@ -257,19 +316,46 @@ defmodule TestHelper do
         page: [
           %Storage.Page{
             id:         1,
+            storage_status:  "state",
+            record_status:  "existing",
             url:        "https://varvy.com/pagespeed/wicked-fast.html",
             version_id: 1
           },
           %Storage.Page{
             id:         2,
+            storage_status:  "state",
+            record_status:  "existing",
             url:        "https://staging.app.funnelcloud.io/#/plant/All/overview/at-a-glance",
             version_id: 2
           },
           %Storage.Page{
             id:         3,
+            storage_status:  "state",
+            record_status:  "existing",
             url:        "https://staging.app.funnelcloud.io/#/machines/1",
             version_id: 2
           },
+        ],
+        element: [
+          %Storage.Element{
+            id:             1,
+            storage_status:  "state",
+            record_status:  "existing",
+            name: "Google Guidelines",
+            strategy: "xpath",
+            selector: ~s|//div[@id='menu']/ul//a[@href='/']|,
+            page_id: 1
+
+          },
+          %Storage.Element{
+            id:             2,
+            storage_status:  "state",
+            record_status:  "existing",
+            strategy: "xpath",
+            selector: ~s|//div[@id='menu']/ul//a[@href='/']|,
+            page_id: 1
+          }
+
         ],
       }
     end
@@ -321,4 +407,42 @@ defmodule TestHelper do
     end
   end
 
+  defmacro page_form_existing() do
+    quote do
+      %{
+        "id" => "1",
+        "record_status" => "existing",
+        "storage_status" => "state",
+        "url" => "www.test.com",
+        "version_id" => "1"
+      }
+    end
+  end
+
+  defmacro element_form_existing() do
+    quote do
+      %{
+        "id" => "10936504",
+        "name" => "fdsa",
+        "page_id" => "1",
+        "record_status" => "new",
+        "selector" => "fdsadfsa",
+        "storage_status" => "web",
+        "strategy" => "xpath"
+      }
+    end
+  end
+
+  defmacro content_form_existing() do
+    quote do
+      %{
+        "id" => "10936504",
+        "storage_status" => "web",
+        "record_status" => "new",
+        "name" => "asdfafg",
+        "description" => "asdwrwrh",
+        "team_id" => "1"
+      }
+    end
+  end
 end
