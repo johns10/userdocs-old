@@ -12,8 +12,9 @@ defmodule LiveViewWeb.Step.Event do
 
   def handle_event("step::new", data, socket) do
     Logger.debug("It gets the version, the step, and the order")
-    version_id = Helpers.get_id(data["id"])
-    assigns = Userdocs.Step.new(socket.assigns, :version, version_id)
+    parent_id = Helpers.get_id(data["parent-id"])
+    parent_type = String.to_atom(Helpers.get_id(data["parent-type"]))
+    assigns = Userdocs.Step.new(socket.assigns, parent_type, parent_id)
     {:noreply, assign(socket, assigns)}
   end
 

@@ -107,23 +107,12 @@ defmodule LiveViewWeb.StepView do
     """
   end
 
-  def render(changeset, assigns, :footer) do
-    ~L"""
-    """
-  end
-
-  def render(parent_id, assigns, :new_step_button) do
-    ~L"""
-      <div class="d-flex justify-content-around bd-highlight">
-        <div class="p-2 bd-highlight">
-          <%= InputHelpers.button_new("step", parent_id,
-            LiveViewWeb.Version.current(assigns) == nil) %>
-        </div>
-      </div>
-    """
-  end
-
-  def mount(_session, socket) do
-    {:ok, assign(socket, deploy_step: "Ready!")}
+  def render(parent_type, parent_id, assigns, :new_step_button) do
+    content_tag(:div, [ class: "d-flex justify-content-around bd-highlight" ]) do
+      content_tag(:div, [ class: "p-2 bd-highlight" ]) do
+        InputHelpers.button_new("step", parent_id, parent_type,
+            LiveViewWeb.Version.current(assigns) == nil)
+      end
+    end
   end
 end

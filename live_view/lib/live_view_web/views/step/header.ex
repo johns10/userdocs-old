@@ -15,8 +15,15 @@ defmodule LiveViewWeb.Step.Header do
         ]
       end,
       " (", Integer.to_string(step.id), "): ",
-        step.storage_status, " ",
-        step.record_status
+      step.storage_status, " ",
+      step.record_status,
+      content_tag(:i, [
+        class: "fa fa-edit",
+        phx_click: "draggable_hook",
+        draggable: true
+      ]) do
+        ""
+      end
     ]
   end
 end

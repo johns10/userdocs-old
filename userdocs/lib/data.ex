@@ -271,7 +271,7 @@ defmodule Userdocs.Data do
 
   def new_page_step_form() do
     %{
-      mode: :new
+      mode: :button
     }
   end
 
@@ -311,11 +311,12 @@ defmodule Userdocs.Data do
         new_project_versions: %{},
         new_project: nil,
         new_page_elements: %{},
+        new_page_steps: %{},
         new_content: nil
       },
       active_annotations: [],
       ui: %{
-
+        page_step_form: %{},
         page_dropdown: %{
           active: nil,
         },
@@ -363,8 +364,6 @@ defmodule Userdocs.Data do
             collapse: "collapse show"
           }
         },
-
-
         version_page_form: %{
         },
         page_element_forms: %{

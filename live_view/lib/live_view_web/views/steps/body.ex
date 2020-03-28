@@ -1,4 +1,4 @@
-defmodule LiveViewWeb.Page.Steps.Body do
+defmodule LiveViewWeb.Steps.Body do
   # use LiveViewWeb, :view
   use Phoenix.LiveView
   use Phoenix.HTML
@@ -9,11 +9,15 @@ defmodule LiveViewWeb.Page.Steps.Body do
 
   require Logger
 
-  def render(assigns, page) do
+  def render(assigns, parent_type, parent_id) do
+    Logger.debug("Rendering Steps Body")
+    parent = Userdocs.Data.get_one(assigns, parent_type, parent_id)
+    parent_fk = String.to_atom(Atom.to_string(parent_type) <> "_id")
+
     { assigns, result } = StateHandlers.get_related(
       assigns,
-      :page_id,
-      [ page ],
+      parent_fk,
+      [ parent ],
       :step
     )
 
@@ -41,7 +45,7 @@ defmodule LiveViewWeb.Page.Steps.Body do
             end,
             if object.id in assigns.active_steps do
               Step.Form.render(
-                assigns.changesets.step[object.id] ,
+                assigns.changesets.step[object.id],
                 object,
                 assigns,
                 :form

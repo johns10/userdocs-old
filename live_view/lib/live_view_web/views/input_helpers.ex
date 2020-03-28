@@ -30,7 +30,7 @@ defmodule LiveViewWeb.InputHelpers do
     end
   end
 
-  def button_new(type, id, disabled) do
+  def button_new(type, parent_id \\ nil, parent_type \\ nil, disabled \\ false) do
     IO.inspect(disabled)
     content_tag(
       :button,
@@ -38,7 +38,8 @@ defmodule LiveViewWeb.InputHelpers do
       type: "button",
       phx_click: type <> "::new",
       class: "btn btn-success btn-lg",
-      phx_value_id: id,
+      phx_value_parent_id: parent_id,
+      phx_value_parent_type: parent_type,
       disabled: disabled
     )
   end

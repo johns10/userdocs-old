@@ -111,7 +111,9 @@ defmodule Userdocs.Page do
 
   def expand_step_list(assigns, id) do
     Logger.debug("Expanding page step list in Userdocs")
-    assigns = Domain.expand(assigns, id, :active_steps)
+    assigns
+    |> Kernel.put_in([:ui, :page_step_form, id], Data.new_page_step_form())
+    |> Domain.expand(id, :active_steps)
   end
 
   def expand_element_list(assigns, id) do

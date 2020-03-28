@@ -12,7 +12,7 @@ defmodule LiveViewWeb.Page.Event do
 
   def handle_event("page::new", data, socket) do
     Logger.debug("It creates a new changeset for this page and puts on state")
-    version_id = Helpers.get_id(data["id"])
+    version_id = Helpers.get_id(data["parent-id"])
     assigns = Userdocs.Page.new(socket.assigns, version_id)
     {:noreply, assign(socket, assigns)}
   end

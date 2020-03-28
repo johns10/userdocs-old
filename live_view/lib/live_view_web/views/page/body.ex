@@ -1,8 +1,12 @@
 defmodule LiveViewWeb.Page.Body do
+
+  require Logger
+
   use Phoenix.LiveView
   use Phoenix.HTML
 
   alias LiveViewWeb.Page
+  alias LiveViewWeb.Steps
   alias LiveViewWeb.Annotations
   alias LiveViewWeb.InputHelpers
 
@@ -11,16 +15,21 @@ defmodule LiveViewWeb.Page.Body do
       [
         content_tag(:div, [ class: "card" ]) do
           [
-            Page.Steps.Header.render(assigns, page),
+            Steps.Header.render(assigns, page),
             if page.id in assigns.active_steps do
+              new_step_id = assigns.current_changesets.new_page_steps[page.id]
+              Logger.debug("rendering steps header")
+              Logger.debug(inspect(assigns.current_changesets))
+              Logger.debug(new_step_id)
+              Logger.debug(page.id)
               [
                 content_tag(:ul, [ class: "card-body" ]) do
                   content_tag(:ul, [ class: "list-group" ]) do
-                    Page.Steps.Body.render(assigns, page)
+                    Steps.Body.render(assigns, :page, page.id)
                   end
                 end,
                 content_tag(:div, [ class: "card-footer" ]) do
-                  LiveViewWeb.Page.Steps.Footer.render(assigns, page.id)
+                  Steps.Footer.render(assigns, :page, page.id, new_step_id)
                 end
               ]
             else

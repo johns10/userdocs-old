@@ -86,7 +86,7 @@ defmodule LiveViewWeb.Content.Menu do
                   Logger.debug(inspect(id))
                   Logger.debug(inspect(object))
                   [
-                    Content.Header.render(object, assigns),
+                    #Content.Header.render(object, assigns),
                     LiveViewWeb.Content.Form.render(
                       assigns.changesets.content[id],
                       object,

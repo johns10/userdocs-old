@@ -11,9 +11,12 @@ defmodule Userdocs.Step do
   def new(assigns, parent_type, parent_id) do
     parent = Data.get_one(assigns, parent_type, parent_id)
     parent_id_atom = String.to_atom(Atom.to_string(parent_type) <> "_id")
+    Logger.debug("Making new Step")
+    Logger.debug(inspect(parent))
     order = Data.max_order(assigns, parent_id_atom, parent, :step)
+    Logger.debug(inspect(order))
 
-    step_map = Constants.new_project_step_map(assigns, order)
+    step_map = Constants.new_page_step_map(assigns, parent_id, order)
 
     { assigns, { :ok, new_step }, changeset } =
       Changeset.apply_changeset(assigns, :step, step_map)
@@ -25,12 +28,14 @@ defmodule Userdocs.Step do
     current_changeset_atom = String.to_atom("new_" <> Atom.to_string(parent_type) <> "_steps")
     form_atom = String.to_atom(Atom.to_string(parent_type) <> "_step_form")
 
+    Logger.debug(inspect(current_changeset_atom))
+    Logger.debug(inspect(form_atom))
+
     assigns =
       assigns
       |> Kernel.put_in([:changesets, :step, step.id], changeset)
       |> Kernel.put_in([:current_changesets, current_changeset_atom, parent_id], step.id)
-      |> Kernel.put_in([:ui, form_atom, :mode], :new)
-      |> Kernel.put_in([:ui, form_atom, :toggled], true)
+      |> Kernel.put_in([:ui, form_atom, parent_id, :mode], :new)
 
     updated_step = Map.put(step, :record_status, "existing")
     { assigns, result } = StateHandlers.update(assigns, :step, updated_step)

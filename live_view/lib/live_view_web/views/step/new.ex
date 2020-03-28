@@ -6,9 +6,9 @@ defmodule LiveViewWeb.Step.Control.New do
   alias LiveViewWeb.Version
   alias LiveViewWeb.InputHelpers
 
-  def render(assigns, parent_id) do
+  def render(assigns, parent_type, parent_id) do
     content_tag(:div, [class: "d-flex justify-content-around bd-highlight"]) do
-      InputHelpers.button_new("step", parent_id)
+      InputHelpers.button_new("step", parent_id, parent_type, false)
     end
   end
 end

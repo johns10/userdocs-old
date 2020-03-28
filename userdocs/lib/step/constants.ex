@@ -25,14 +25,12 @@ defmodule Userdocs.Step.Constants do
     }
   end
 
-  def new_page_step_map(assigns, page_id) do
-    version_id = assigns.current_version_id
-
+  def new_page_step_map(assigns,  page_id, order \\ 0) do
     %{
       id: Helpers.provisional_id(),
       storage_status: "web",
       record_status: "new",
-      order: 0,
+      order: order,
       args: %{},
       version: nil,
       version_id: nil,

@@ -8,7 +8,8 @@ defmodule LiveViewWeb.Page.Control.New do
 
   def render(assigns, parent_id) do
     content_tag(:div, [class: "d-flex justify-content-around bd-highlight"]) do
-      InputHelpers.button_new("page", parent_id, Version.current(assigns) == nil)
+      InputHelpers.button_new("page", parent_id, :version,
+        Version.current(assigns) == nil)
     end
   end
 end

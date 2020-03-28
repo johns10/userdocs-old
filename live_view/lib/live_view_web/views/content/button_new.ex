@@ -8,7 +8,7 @@ defmodule LiveViewWeb.Content.Button.New do
 
   def render(assigns) do
     content_tag(:div, [class: "d-flex justify-content-around bd-highlight"]) do
-      InputHelpers.button_new("content", assigns.current_team_id, false)
+      InputHelpers.button_new("content", assigns.current_team_id)
     end
   end
 end

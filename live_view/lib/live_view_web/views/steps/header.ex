@@ -1,4 +1,4 @@
-defmodule LiveViewWeb.Page.Steps.Header do
+defmodule LiveViewWeb.Steps.Header do
   # use LiveViewWeb, :view
   use Phoenix.LiveView
   use Phoenix.HTML

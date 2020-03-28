@@ -10,6 +10,7 @@ defmodule LiveViewWeb.Version.StepsControl do
   def render(assigns, version_id) do
     if assigns.ui.version_step_form.toggled == false do
       LiveViewWeb.StepView.render(
+        :version,
         assigns.current_version_id,
         assigns,
         :new_step_button
