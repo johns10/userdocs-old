@@ -18,7 +18,8 @@ defmodule LiveViewWeb.Element.Event do
 
   def handle_event("element::new", data, socket) do
     Logger.debug("It creates a new changeset for this page and puts on state")
-    page_id = Helpers.get_id(data["id"])
+    Logger.debug(inspect(data))
+    page_id = Helpers.get_id(data["parent-id"])
     assigns = Userdocs.Element.new(socket.assigns, page_id)
     {:noreply, assign(socket, assigns)}
   end
@@ -55,44 +56,4 @@ defmodule LiveViewWeb.Element.Event do
     assigns = Userdocs.Element.validate(socket.assigns, element)
     {:noreply, assign(socket, assigns)}
   end
-  """
-  def handle_event("page::expand", data, socket) do
-    id = Helpers.get_id(data["id"])
-    assigns = Userdocs.Page.expand(socket.assigns, id)
-    {:noreply, assign(socket, assigns)}
-  end
-
-  def handle_event("page::select", data = %{"id" => id}, socket) do
-    socket =
-      Page.set_current(socket, id)
-      |> Helpers.put_in_socket([:ui, "page-menu", "toggled"], false)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("page::close_modal", data, socket) do
-    socket = Helpers.put_in_socket(socket, [:ui, :version_page_menu, :toggled], false)
-    {:noreply, socket}
-  end
-
-  def handle_event("page::dropdown_toggle", data, socket) do
-    id = Helpers.get_id(data["id"])
-    assigns = Userdocs.Page.toggle_dropdown(socket.assigns, id)
-    {:noreply, assign(socket, assigns)}
-  end
-
-  def handle_event("page::step_list_expand", data, socket) do
-    Logger.debug("Expanding Page Step List")
-    id = Helpers.get_id(data["id"])
-    assigns = Userdocs.Page.expand_step_list(socket.assigns, id)
-    {:noreply, assign(socket, assigns)}
-  end
-
-  def handle_event("page::element_list_expand", data, socket) do
-    Logger.debug("Expanding Page Step List")
-    id = Helpers.get_id(data["id"])
-    assigns = Userdocs.Page.expand_element_list(socket.assigns, id)
-    {:noreply, assign(socket, assigns)}
-  end
-"""
 end

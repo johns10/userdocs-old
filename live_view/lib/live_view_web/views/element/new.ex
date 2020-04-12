@@ -9,6 +9,8 @@ defmodule LiveViewWeb.Element.Control.New do
   require Logger
 
   def render(assigns, parent_id) do
-    InputHelpers.button_new("element", parent_id)
+    Logger.debug("Rendering new Element Control")
+    Logger.debug(parent_id)
+    InputHelpers.button_new("element", parent_id, "page")
   end
 end

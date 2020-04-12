@@ -14,13 +14,10 @@ defmodule Userdocs.Element do
 
     element_map = Constants.new_map(assigns, page_id)
 
-
     { assigns, { :ok, new_element }, changeset } =
       Changeset.apply_changeset(assigns, :element, element_map)
 
-
     element_struct = Kernel.struct(Storage.Element, element_map)
-
 
     { assigns, result } = StateHandlers.create(assigns, :element, new_element)
     element = Enum.at(result, 0)
@@ -28,7 +25,7 @@ defmodule Userdocs.Element do
     assigns =
       assigns
       |> Kernel.put_in([:changesets, :element, element.id], changeset)
-      |> Kernel.put_in([:current_changesets, :new_page_elements, element.page_id], element.id)
+      |> Kernel.put_in([:current_changesets, :new_page_elements, page_id], element.id)
       |> Kernel.put_in([:ui, :page_element_forms, page_id], Data.new_page_element_form())
 
     updated_step = Map.put(element, :record_status, "existing")

@@ -8,6 +8,8 @@ defmodule LiveViewWeb.Elements.Footer do
   require Logger
 
   def render(assigns, page) do
+    Logger.debug("Rendering Elements Footer")
+    Logger.debug(inspect(page.id))
     if (assigns.ui.page_element_forms[page.id] != nil &&
       assigns.ui.page_element_forms[page.id].mode == :new
     ) do
