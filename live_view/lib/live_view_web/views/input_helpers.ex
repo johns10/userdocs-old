@@ -40,7 +40,7 @@ defmodule LiveViewWeb.InputHelpers do
       phx_value_parent_id: parent_id,
       phx_value_parent_type: parent_type,
       disabled: disabled
-    ]) do "New " <> String.capitalize(parent_type) end
+    ]) do "New " <> String.capitalize(type) end
   end
 
   def button_save(form, label \\ "Save") do

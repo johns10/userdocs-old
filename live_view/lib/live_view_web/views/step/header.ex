@@ -12,7 +12,7 @@ defmodule LiveViewWeb.Step.Header do
     content_tag(:div, [
       class: "d-flex w-100 justify-content-between",
       phx_click: "step::expand",
-      phx_value_step_id: step.idz
+      phx_value_step_id: step.id
     ]) do
       [
         content_tag(:h5, [class: "mb-1"]) do
