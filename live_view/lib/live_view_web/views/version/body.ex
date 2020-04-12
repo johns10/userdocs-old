@@ -46,15 +46,13 @@ defmodule LiveViewWeb.Version.Body do
           _pages_header = content_tag(:div, [class: "card"]) do
             [
               Pages.Header.render(assigns),
-              _pages =
-                content_tag(:div, [class: "card-body"]) do
-                  LiveViewWeb.Version.Pages.render(assigns, Version.Constants.current(assigns))
-                end,
+              Pages.Body.render(assigns, Version.Constants.current(assigns)),
+              """
               _pages_menu_control =
                 content_tag(:div, [class: "card-footer"]) do
-                  LiveViewWeb.Version.PagesControl.render(assigns, Version.Constants.current_id(assigns))
+                  LiveViewWeb.Version.PagesControl.render(assigns, Version.Constants.current(assigns))
                 end
-              || ""
+                """
             ]
           end
         end
