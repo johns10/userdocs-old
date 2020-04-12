@@ -5,6 +5,7 @@ defmodule LiveViewWeb.Version.Body do
   alias Userdocs.Version
   alias Userdocs.InputHelpers
   alias LiveViewWeb.Steps
+  alias LiveViewWeb.Pages
 
   require Logger
 
@@ -44,10 +45,7 @@ defmodule LiveViewWeb.Version.Body do
         _version_pages_menu = content_tag(:div, [class: "container-fluid"]) do
           _pages_header = content_tag(:div, [class: "card"]) do
             [
-              _pages_header =
-                content_tag(:h2, [class: "card-header"]) do
-                  "Project Pages"
-                end,
+              Pages.Header.render(assigns),
               _pages =
                 content_tag(:div, [class: "card-body"]) do
                   LiveViewWeb.Version.Pages.render(assigns, Version.Constants.current(assigns))
