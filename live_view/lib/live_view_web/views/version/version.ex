@@ -46,7 +46,6 @@ defmodule LiveViewWeb.Version do
   ############################# CRUD ###############################
 
   def set_current(socket, id) do
-    IO.puts("Setting Current Version")
     id = Helpers.get_id(id)
     {assigns, objects} = StateHandlers.get(socket.assigns, :version, [id])
     object = Enum.at(objects, 0)

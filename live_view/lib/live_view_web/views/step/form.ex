@@ -8,7 +8,7 @@ defmodule LiveViewWeb.Step.Form do
 
   require Logger
 
-  def render(step_changeset, step, assigns, :form) do
+  def render(step_changeset, step, assigns) do
     f = form_for(step_changeset, "#", [  ])
     Logger.debug("Rendering Step Form")
     content_tag(:form, [ phx_submit: :"step::save", phx_change: :"step::validate" ]) do

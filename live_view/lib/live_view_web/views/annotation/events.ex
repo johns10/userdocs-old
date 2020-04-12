@@ -11,26 +11,23 @@ defmodule LiveViewWeb.Annotation.Event do
   alias LiveViewWeb.Changeset
 
   alias Userdocs.Annotation
-"""
-  def handle_event("save_annotation", %{"annotation_form" => annotation}, socket) do
-    # IO.puts("Handling save annotation event")
-    { parent_type , annotation } = Map.pop(annotation, "parent_type")
-    { parent_id, annotation } = Map.pop(annotation, "parent_id")
-    Map.put(annotation, parent_type, parent_id)
 
-    %Storage.Annotation{}
-    |> AnnotationForm.changeset(
-      annotation,
-      %{pages: socket.assigns.page, annotation_types: socket.assigns.annotation_type}
-    )
-    |> Ecto.Changeset.apply_action(:insert)
-    |> Helpers.create(:annotation)
-
-    {:noreply, socket}
+  def handle_event("annotation::expand", data, socket)  do
+    Logger.debug("It expands or un-expands the annotation")
+    id = Helpers.get_id(data["id"])
+    assigns = Userdocs.Annotation.expand(socket.assigns, id)
+    { :noreply, assign(socket, assigns) }
   end
 
+  def handle_event("annotation::save", %{"annotation" => annotation}, socket) do
+    Logger.debug("It saves this annotation to the state:")
+    assigns = Userdocs.Annotation.save(socket.assigns, annotation)
+    {:noreply, assign(socket, assigns)}
+  end
+"""
+
   def handle_event("annotate_page", data, socket) do
-    # IO.puts("Creating Job")
+    #IO.puts("Creating Job")
     job = %{
       String.to_atom(data["type"]) => String.to_atom(data["id"]),
       job_type: :annotate,
@@ -45,7 +42,7 @@ defmodule LiveViewWeb.Annotation.Event do
   ######################### Annotation Wrappers ######################
 
   def handle_event("page_annotation_new", data, socket) do
-    IO.puts("New Annotation Event")
+    #IO.puts("New Annotation Event")
     id = Helpers.form_id(data)
 
     socket =
@@ -57,12 +54,13 @@ defmodule LiveViewWeb.Annotation.Event do
   end
 
   def handle_event("annotation::expand", data, socket) do
-    IO.puts("Expand Annotation")ing
+    #IO.puts("Expand Annotation")ing
     id = Helpers.get_id(data["id"])
     socket = Annotation.expand(socket, id)
     {:noreply, socket}
   end
-
+  """
+  """
   def handle_event("annotation::validate", data, socket) do
     Logger.debug("To Validate an Annotation")
     Logger.debug("It extracts the steps from the form, and attaches their respective args")
@@ -96,8 +94,6 @@ defmodule LiveViewWeb.Annotation.Event do
     Logger.debug(
       old_changeset.changes.annotation_type_id == updated_changeset.changes.annotation_type_id
     )
-    """
-    """
     changeset =
       %Storage.Annotation{}
       |> Storage.Annotation.form_changeset(annotation, %{
@@ -105,10 +101,14 @@ defmodule LiveViewWeb.Annotation.Event do
         annotation_types: annotation_types
       })
       |> Map.put(:action, :insert)
-    """
-    """
 
     {:noreply, socket}
   end
   """
+  def handle_event("annotation::validate", %{"annotation" => form}, socket) do
+    Logger.debug("To Validate an Annotation")
+    id = Helpers.form_id(form)
+    assigns = Userdocs.Annotation.validate(socket.assigns, form)
+    { :noreply, assign(socket, assigns)}
+  end
 end

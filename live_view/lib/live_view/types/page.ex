@@ -14,12 +14,10 @@ defmodule LiveViewWeb.Types.Page do
   end
 
   def expand_page(socket, id) do
-    IO.puts("Expanding Page")
     Helpers.expand(socket, id, :active_pages)
   end
 
   def toggle_new_form_mode(socket, id, mode) do
-    IO.puts("Toggling new step form")
     assigns =
       Map.get(socket, :assigns)
       |> Kernel.put_in([:ui, "page-menu", "form-modes", id], mode)
@@ -27,7 +25,6 @@ defmodule LiveViewWeb.Types.Page do
   end
 
   def annotations_steps(assigns, page) do
-    IO.puts("Generating Annotation Steps")
     { state, steps } = StateHandlers.get_related(assigns, :page_id, [page], :step)
     { state, annotations } = StateHandlers.get_related(assigns, :page_id, [page], :annotation)
     annotations = Enum.map(

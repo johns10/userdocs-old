@@ -66,4 +66,11 @@ defmodule LiveViewWeb.Version.Event do
     assigns = Userdocs.Version.close_modal(socket.assigns)
     {:noreply, assign(socket, assigns)}
   end
+
+  def handle_event("version::step_list_expand", data, socket) do
+    Logger.debug("Expanding Version Step List")
+    id = Helpers.get_id(data["id"])
+    assigns = Userdocs.Version.expand_step_list(socket.assigns, id)
+    {:noreply, assign(socket, assigns)}
+  end
 end

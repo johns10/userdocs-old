@@ -158,12 +158,15 @@ defmodule Userdocs.Step do
   end
 
   def reorder_start(assigns, data, key) do
+    Logger.debug("Reordering, start event")
     assigns = Map.put(assigns, key, data)
   end
 
   def reorder_drag(assigns, data, id) do
     Logger.debug("Reordering, drag event")
+    Logger.debug(inspect(assigns.drag))
     data = assigns.drag
+    Logger.debug(inspect(data))
     target = Data.get_one(assigns, :step, id)
     source = Data.get_one(assigns, :step,
       String.to_integer(data["source-id"]))
@@ -188,20 +191,18 @@ defmodule Userdocs.Step do
     Logger.debug("Reordering: end event")
     data = assigns.drag
     target = Data.get_one(assigns, :step, id)
+    parent_type = String.to_atom(data["parent-type"])
     source = Data.get_one(assigns, :step,
       String.to_integer(data["source-id"]))
-    parent = Data.get_one(assigns, :version,
+    parent = Data.get_one(assigns, parent_type,
       String.to_integer(data["parent-id"]))
 
+    parent_key = String.to_atom(data["parent-type"] <> "_id") 
+
     { assigns, steps } = StateHandlers.get_related(
-      assigns, :version_id, [ parent ], :step)
+      assigns, parent_key, [ parent ], :step)
 
     Data.update_order_state(assigns, :step, steps)
-  end
-
-  def toggle_version_step_menu(assigns) do
-    status = assigns.ui.project_steps_menu.toggled
-    assigns = Kernel.put_in(assigns, [:ui, :project_steps_menu, :toggled], not status)
   end
 
 end

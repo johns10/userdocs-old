@@ -7,7 +7,6 @@ defmodule LiveViewWeb.Version.Form do
   alias LiveViewWeb.Helpers
 
   def render(assigns, version_changeset, project) do
-    IO.puts("Rendering Version Form")
     ~L"""
     <div
       class="modal fade show"

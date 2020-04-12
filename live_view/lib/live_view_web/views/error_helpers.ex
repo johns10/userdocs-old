@@ -3,7 +3,6 @@ defmodule LiveViewWeb.ErrorHelpers do
   use Phoenix.HTML
 
   def error_tag(form, field) do
-    IO.puts("It creates the error text")
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
       content_tag(:span, translate_error(error), class: "invalid-feedback")
     end)

@@ -9,7 +9,7 @@ defmodule Storage.Team do
 
     many_to_many(
       :user,
-      User,
+      Storage.User,
       join_through: "team_user",
       on_replace: :delete
     )

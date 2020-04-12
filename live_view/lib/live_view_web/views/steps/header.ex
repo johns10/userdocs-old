@@ -5,11 +5,11 @@ defmodule LiveViewWeb.Steps.Header do
 
   require Logger
 
-  def render(assigns, page) do
+  def render(assigns, parent_type, parent_id) do
     content_tag(:div, [
       class: "card-header",
-      phx_click: "page::step_list_expand",
-      phx_value_id: page.id
+      phx_click: parent_type <> "::step_list_expand",
+      phx_value_id: parent_id
     ]) do
       "Steps"
     end

@@ -3,6 +3,7 @@ defmodule Userdocs.Version do
   require Logger
 
   alias Userdocs.Version.Constants
+  alias Userdocs.Domain
   alias Userdocs.Helpers
   alias Userdocs.Data
   alias Userdocs.Changeset
@@ -92,6 +93,12 @@ defmodule Userdocs.Version do
 
   def close_modal(assigns) do
     Kernel.put_in(assigns, [:ui, :version_form, :toggled], false)
+  end
+
+  def expand_step_list(assigns, id) do
+    assigns
+    |> Kernel.put_in([:ui, :version_step_form, id], Data.new_page_step_form())
+    |> Domain.expand(id, :active_version_steps)
   end
 
 end

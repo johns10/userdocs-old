@@ -66,7 +66,7 @@ defmodule Userdocs.Element do
   end
 
   def save(assigns, form) do
-    Logger.debug("Saving an Element")
+    #Logger.debug("Saving an Element")
     page_id = String.to_integer(Map.get(form, "page_id"))
 
     action = Data.object_action(form)
@@ -76,7 +76,7 @@ defmodule Userdocs.Element do
       |> Changeset.handle_changeset_result(:element)
 
     if action == :insert do
-      Logger.debug("adding the button mode to the form")
+      #Logger.debug("adding the button mode to the form")
       assigns = Kernel.put_in(assigns,
         [ :ui, :page_element_forms, page_id, :mode ],
         :button

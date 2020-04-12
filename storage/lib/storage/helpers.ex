@@ -10,7 +10,6 @@ defmodule Storage.Helpers do
   end
 
   def update_status(changeset, status) do
-    IO.puts("Updating Status")
     changes = Map.fetch!(changeset, :changes)
     |> Map.put(:storage_status, status)
     Map.put(changeset, :changes, changes)

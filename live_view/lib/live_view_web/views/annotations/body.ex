@@ -32,11 +32,11 @@ defmodule LiveViewWeb.Annotations.Body do
                 phx_click: Atom.to_string(type) <> "::expand",
                 phx_value_id: object.id
               ]) do
-                LiveViewWeb.Annotation.Header.render(object, :page, object.page_id, assigns)
+                LiveViewWeb.Annotation.Header.render(object, parent_type, parent_id, assigns)
               end,
               if object.id in assigns.active_annotations do
                 changeset = assigns.changesets.annotation[object.id]
-                ""
+                LiveViewWeb.Annotation.Form.render(changeset, object, assigns)
               end
               || ""
             ]

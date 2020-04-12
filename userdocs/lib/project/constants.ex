@@ -6,7 +6,6 @@ defmodule Userdocs.Project.Constants do
   ############################## Constants ##########################
 
   def new_map(assigns) do
-    IO.puts("New Project Map")
     team = Enum.at(assigns.team, 0)
 
     %{

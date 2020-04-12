@@ -42,11 +42,10 @@ defmodule Userdocs.Annotation do
     { assigns, result } = StateHandlers.update(assigns, type, updated_object)
     assigns
   end
-  """
 
   def expand(assigns, id) do
-    assigns = Domain.expand(assigns, id, :active_steps)
-    if id in assigns.active_steps do
+    assigns = Domain.expand(assigns, id, :active_annotations)
+    if id in assigns.active_annotations do
       edit(assigns, id)
     else
       assigns
@@ -54,19 +53,18 @@ defmodule Userdocs.Annotation do
   end
 
   def edit(assigns, id) do
-    if assigns.changesets.step[id] == nil do
+    if assigns.changesets.annotation[id] == nil do
       Logger.debug("nil changeset")
 
-      object = Data.get_one(assigns, :step, id)
-      |> Data.parse_args()
+      object = Data.get_one(assigns, :annotation, id)
       |> Map.from_struct()
 
       #I have to do this because of the parse args stuff
-      changeset = Changeset.new(assigns, object, :step)
-      changeset = Data.edit(assigns, :step, changeset, id)
+      changeset = Changeset.new(assigns, object, :annotation)
+      changeset = Data.edit(assigns, :annotation, changeset, id)
 
       assigns
-      |> Kernel.put_in([:changesets, :step, id], changeset)
+      |> Kernel.put_in([:changesets, :annotation, id], changeset)
     else
       Logger.debug("not nil changeset")
       assigns
@@ -74,10 +72,26 @@ defmodule Userdocs.Annotation do
   end
 
   def save(assigns, form) do
-    Changeset.apply_changeset(assigns, :step, form)
-    |> Changeset.handle_changeset_result(:step)
-    |> Kernel.put_in([ :ui, :version_step_form, :toggled ], false)
+    #Logger.debug("Saving an Element")
+    page_id = String.to_integer(Map.get(form, "page_id"))
+
+    action = Data.object_action(form)
+
+    assigns =
+      Changeset.apply_changeset(assigns, :element, form)
+      |> Changeset.handle_changeset_result(:element)
+
+    if action == :insert do
+      #Logger.debug("adding the button mode to the form")
+      assigns = Kernel.put_in(assigns,
+        [ :ui, :page_annotation_forms, page_id, :mode ],
+        :button
+      )
+    else
+      assigns
+    end
   end
+  """
 
   def remove(assigns, type, id) do
     storage_status = assigns.changesets.step[id].changes.storage_status
@@ -96,67 +110,6 @@ defmodule Userdocs.Annotation do
 
     changeset =  Constants.changeset(assigns, step)
     assigns = Kernel.put_in(assigns, [ :changesets, :step, id ], changeset)
-  end
-
-  def validate(assigns, form, id) do
-    step_id = id
-    step_type_id = String.to_integer(form["step_type_id"])
-
-    step_type = Data.get_one(assigns, :step_type, step_type_id)
-    step_object =
-      Data.get_one(assigns, :step, step_id)
-      |> Data.parse_args()
-
-    Logger.debug("If it can't find the original object, it returns the changeset from the form")
-    #I have to do this because of the parse args stuff
-    { assigns, result, original_changeset } =
-      Changeset.apply_changeset(assigns, :step, form)
-    original_changeset = Data.edit(assigns, :step, original_changeset, id)
-
-    current_changeset = Changeset.new(assigns, form, :step)
-    old_changeset = assigns.changesets.step[step_id]
-
-    Logger.debug("If there's an old changeset, use it.  Otherwise, use the original changeset.")
-    old_changeset =
-      Changeset.check_old_changeset(old_changeset, original_changeset)
-
-    old_step_type_id =
-      try do
-        old_changeset.changes.step_type_id
-      rescue
-        KeyError -> nil
-        _ -> nil
-      end
-    new_step_type_id =
-      try do
-        current_changeset.changes.step_type_id
-      rescue
-        KeyError -> nil
-        _ -> nil
-      end
-
-    updated_args =
-      Changeset.check_type_change(
-        old_step_type_id == new_step_type_id,
-        form["args"],
-        current_changeset.params["args"],
-        step_type.args
-      )
-
-    updated_step_form = Map.put(form, "args", updated_args)
-
-    Logger.debug("It updates the form with the new args")
-
-    updated_changeset =
-      %Storage.Step{}
-      |> Storage.Step.form_changeset(updated_step_form, Constants.associations(assigns))
-      |> Map.put(:action, :insert)
-
-    Logger.debug("It creates a new changeset from the form and puts it on the assigns:")
-
-    assigns = Kernel.put_in(assigns, [:changesets, :step, step_id], updated_changeset)
-    changeset = Constants.changeset(assigns, form)
-    Kernel.put_in(assigns, [:changesets, :version, id], changeset)
   end
 
   def reorder_start(assigns, data, key) do
@@ -205,4 +158,9 @@ defmodule Userdocs.Annotation do
     assigns = Kernel.put_in(assigns, [:ui, :project_steps_menu, :toggled], not status)
   end
 """
+  def validate(assigns, form) do
+    changeset = Constants.changeset(assigns, form)
+    Kernel.put_in(assigns, [:changesets, :annotation, changeset.changes.id], changeset)
+  end
+
 end

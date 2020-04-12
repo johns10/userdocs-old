@@ -21,7 +21,7 @@ defmodule Graphql.StepType.StepTypeResolver do
   ################ Relationships ##############
 
   def get(parent, args, _info) do
-    IO.puts("In parent step")
+    #IO.puts("In parent step")
     Graphql.Helpers.get(
       %{id: Graphql.Helpers.atoms_to_strings(parent.steps)},
         @graphql_type

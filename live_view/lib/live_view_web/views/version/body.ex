@@ -4,6 +4,7 @@ defmodule LiveViewWeb.Version.Body do
 
   alias Userdocs.Version
   alias Userdocs.InputHelpers
+  alias LiveViewWeb.Steps
 
   require Logger
 
@@ -19,29 +20,24 @@ defmodule LiveViewWeb.Version.Body do
             end
 
           _version_header = content_tag(:div, [class: "card"]) do
+            current_version = Version.Constants.current(assigns)
             [
-              _steps_header =
-              content_tag(:h2, [
-                class: "card-header",
-                phx_click: "step::toggle_version_step_menu"
-              ]) do
-                "Version Steps"
-              end,
-              _steps =
-                if assigns.ui.project_steps_menu.toggled == true do
-                  content_tag(:div, [class: "card-body"]) do
-                    LiveViewWeb.Version.Steps.render(assigns, Version.Constants.current(assigns))
+              Steps.Header.render(assigns, "version", current_version.id),
+              if current_version.id in assigns.active_version_steps do
+                new_step_id = assigns.current_changesets.new_version_steps[current_version.id]
+                [
+                  content_tag(:ul, [ class: "card-body" ]) do
+                    content_tag(:ul, [ class: "list-group" ]) do
+                      Steps.Body.render(assigns, :version, current_version.id)
+                    end
+                  end,
+                  content_tag(:div, [ class: "card-footer" ]) do
+                    Steps.Footer.render(assigns, :version, current_version.id, new_step_id)
                   end
-                else
-                  ""
-                end,
-              _project_step_menu_control =
-                content_tag(:div, [class: "card-footer"]) do
-                  Logger.debug(assigns.current_version_id)
-                  LiveViewWeb.Version.StepsControl.render(
-                    assigns, assigns.current_version_id)
-                end
-              || ""
+                ]
+              else
+                ""
+              end,
             ]
           end
         end,

@@ -67,7 +67,6 @@ defmodule ProcedureTest do
       })
       find_element(:xpath, ~s|/html//form[@id='tsf']//div[@class='a4bIc']/input[@role='combobox']|)
       |> visible_text()
-      |> IO.puts()
       #I don't know what to assert.  I don't get text back.
   end
 

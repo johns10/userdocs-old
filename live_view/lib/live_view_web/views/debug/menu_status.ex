@@ -31,10 +31,6 @@ defmodule LiveViewWeb.Debug.MenuStatus do
         </div>
         <div class="col-4">
           Version Dropdown Toggled: <%= assigns.ui.version_menu.toggled %></br>
-          Active Steps:
-          <%= for object <- assigns.active_steps do %>
-              <%= object %>
-          <% end %></br>
           Active Annotations:
           <%=
             for object <- assigns.active_page_annotations do
@@ -54,6 +50,9 @@ defmodule LiveViewWeb.Debug.MenuStatus do
           <%= object %>
           <% end %></br>
           Active Elements: <%= for object <- assigns.active_elements do %>
+          <%= object %>
+          <% end %></br>
+          Active Versions: <%= for object <- assigns.active_version_steps do %>
           <%= object %>
           <% end %></br>
         </div>

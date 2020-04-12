@@ -690,19 +690,17 @@ defmodule State.State do
     annotation: [
       %Storage.Annotation{
         id:                 1,
-        name:               "Google Guidelines",
-        label:              "1",
-        description:        "This is the google guidelines.",
+        name:              "1",
         annotation_type_id: 1,
+        element_id:         1,
         page_id:            1,
         content_id:         1
       },
       %Storage.Annotation{
         id:                 2,
-        name:               "Page Speed",
-        description:        "This is the page speed.",
-        label:              "2",
+        name:              "2",
         annotation_type_id: 2,
+        element_id:         2,
         page_id:            1,
         content_id:         2
       }
@@ -774,7 +772,7 @@ defmodule State.State do
     { state, data }
   end
   def live_broadcast(_state, :delete, id, type) do
-    IO.puts("Broadcasting delete")
+    #IO.puts("Broadcasting delete")
     Phoenix.PubSub.broadcast(
       :live_state,
       Atom.to_string(type),

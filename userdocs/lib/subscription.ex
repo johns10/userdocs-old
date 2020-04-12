@@ -6,6 +6,7 @@ defmodule Userdocs.Subscription do
 
   def handle_info({ type, command, object }, assigns) do
     Logger.debug("Handling a #{command} subscription for #{type}")
+    Logger.debug(inspect(object))
 
     { assigns, object } = preprocess(
       type, command, object, assigns)
@@ -39,7 +40,6 @@ defmodule Userdocs.Subscription do
   end
   def preprocess(type, :create, object, assigns) do
     Logger.debug("Handling a preprocessor for creating an #{type}")
-    Logger.debug(object.id)
     { assigns, data } = StateHandlers.update(assigns, type, object)
     { assigns, object }
   end

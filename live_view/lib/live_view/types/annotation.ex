@@ -30,7 +30,6 @@ defmodule LiveViewWeb.Types.Annotation do
   end
 
   def new(socket, _data) do
-    IO.puts("New Annotation")
     LiveViewWeb.Types.Helpers.new(
       socket,
       new_map(socket.assigns),
@@ -39,7 +38,6 @@ defmodule LiveViewWeb.Types.Annotation do
   end
 
   def assign_new({socket, object}, id) do
-    IO.puts("Assigning New Page Step")
     new_step_changesets =
       socket.assigns.ui["page-menu"]["new-annotations"]
       |> Map.put(id, object)

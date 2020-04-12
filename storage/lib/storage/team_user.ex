@@ -6,7 +6,7 @@ defmodule Storage.TeamUser do
 
   @primary_key false
 
-  schema "team_user" do
+  schema "team_member" do
     belongs_to(:user,     Storage.User, primary_key: true)
     belongs_to(:team,     Storage.Team, primary_key: true)
     timestamps()

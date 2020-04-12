@@ -10,12 +10,9 @@ defmodule Userdocs.Domain do
   end
 
   def toggle_active_element(false, assigns, id, list) do
-    IO.puts("Element Not Active")
     [id | assigns[list]]
   end
   def toggle_active_element(true, assigns, id, list) do
-    IO.puts("Element Active")
-
     Enum.filter(
       assigns[list],
       fn o ->

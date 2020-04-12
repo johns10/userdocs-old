@@ -4,76 +4,6 @@ defmodule LiveViewWeb.Helpers do
 
   require Logger
 
-  def default_assigns(socket) do
-    assign(socket,
-      current_project_id: nil,
-      current_version_id: nil,
-      show_removed_projects: true,
-      active_steps: [],
-      active_pages: [],
-      drag: %{},
-      changesets: %{
-        "step" => %{},
-        "project" => %{},
-        "annotation" => %{},
-        "version" => %{},
-        "new-project-steps" => %{},
-        "new-page-step" => %{},
-      },
-      current_changesets: %{
-        "new-project" => nil,
-        "new-project-versions" => %{},
-        "new-version-pages" => %{},
-        "new-version-steps" => %{}
-      },
-      active_annotations: [],
-      ui: %{
-        "project-steps-menu" => %{
-          "expanded" => "true",
-          "update-step-menu" => "false",
-          "update-step" => nil,
-          "new-step-menu" => "false",
-          "toggled" => false,
-          "mode" => :new,
-          "active" => [],
-          "editable" => [nil],
-          class: %{
-            collapse: "collapse show"
-          }
-        },
-        "project-step-form" => %{
-          "toggled" => false,
-          "new" => nil
-        },
-        "project-menu" => %{
-          "toggled" => false
-        },
-        "project-form" => %{
-          "toggled" => false,
-          "mode" => :new,
-          "new" => nil
-        },
-        "version-menu" => %{
-          "toggled" => false
-        },
-        "version-form" => %{
-          "toggled" => false,
-          "mode" => :new,
-          "new" => nil
-        },
-        "page-menu" => %{
-          "toggled" => false,
-          "active-pages" => [],
-          "active-steps" => [],
-          "active-annotations" => [],
-          "new-step-changesets" => %{},
-          "new-annotations" => %{},
-          "form-modes" => %{}
-        }
-      }
-    )
-  end
-
   ################################CRUD################################
 
 
@@ -402,12 +332,9 @@ def move(items, from, to) when Kernel.abs(from - to) > 1 do
   end
 
   def toggle_active_element(false, socket, id, list) do
-    IO.puts("Element Not Active")
     [id | socket.assigns[list]]
   end
   def toggle_active_element(true, socket, id, list) do
-    IO.puts("Element Active")
-
     Enum.filter(
       socket.assigns[list],
       fn o ->

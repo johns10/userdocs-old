@@ -3,7 +3,7 @@ defmodule Job.Builder do
   alias Job.Helpers
 
   def build( job_id, %{ job_type: :annotate, page: page_id }) do
-    IO.puts("Building page annotation job")
+    #IO.puts("Building page annotation job")
     State.create(
       :task,
       String.to_atom(UUID.uuid4()),

@@ -8,7 +8,7 @@ defmodule LiveViewWeb.Version.Pages do
   alias LiveViewWeb.Page
 
   def render(assigns, version) do
-    Logger.debug("rendering version pages")
+    #Logger.debug("rendering version pages")
     { assigns, result } = StateHandlers.get_related(
       assigns,
       :version_id,
@@ -32,7 +32,7 @@ defmodule LiveViewWeb.Version.Pages do
             end
           else
             if (page.storage_status == "state")  do
-              Logger.debug("Rendering header")
+              #Logger.debug("Rendering header")
               changeset = assigns.changesets.page[page.id]
               content_tag(:div, [ class: "card" ]) do
                 [

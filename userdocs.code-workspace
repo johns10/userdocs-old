@@ -2,10 +2,9 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "C:\\Users\\johnd\\OneDrive\\Documents\\state"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"elixir.projectPath": "/live_view"
+	}
 }

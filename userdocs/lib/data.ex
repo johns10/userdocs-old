@@ -288,6 +288,7 @@ defmodule Userdocs.Data do
       current_version_id: nil,
       show_removed_projects: true,
       active_steps: [],
+      active_version_steps: [],
       active_pages: [],
       active_elements: [],
       active_annotations: [],

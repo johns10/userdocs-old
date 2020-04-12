@@ -82,7 +82,7 @@ defmodule LiveViewWeb.StepView do
       %>
       <div class="form-group">
         <%= inputs_for f, :args, fn fp -> %>
-          <%= IO.puts("Rendering args form")
+          <%= #IO.puts("Rendering args form")
             step_id = try do
               Integer.to_string(Helpers.get_id(f.params["id"]))
             rescue

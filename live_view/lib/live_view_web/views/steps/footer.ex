@@ -12,20 +12,19 @@ defmodule LiveViewWeb.Steps.Footer do
   alias LiveViewWeb.Page
 #TODO: change this to the new gear (check elements)
   def render(assigns, parent_type, parent_id, new_step_id) do
-    Logger.debug("Rendering Steps Footer")
     parent = Userdocs.Data.get_one(assigns, parent_type, parent_id)
     parent_fk = String.to_atom(Atom.to_string(parent_type) <> "_id")
     form_atom = String.to_atom(Atom.to_string(parent_type) <> "_step_form")
 
     new_step_changeset = assigns.changesets.step[new_step_id]
 
-    Logger.debug("Rendering Steps Footer")
-    Logger.debug(inspect(parent))
-    Logger.debug(parent_fk)
-    Logger.debug(new_step_id)
-    Logger.debug(inspect(new_step_changeset))
-    Logger.debug(form_atom)
-    Logger.debug(inspect(assigns.ui[form_atom]))
+    #Logger.debug("Rendering Steps Footer")
+    #Logger.debug(inspect(parent))
+    #Logger.debug(parent_fk)
+    #Logger.debug(new_step_id)
+    #Logger.debug(inspect(new_step_changeset))
+    #Logger.debug(form_atom)
+    #Logger.debug(inspect(assigns.ui[form_atom]))
 
     if assigns.ui[form_atom][parent_id].mode == :button do
       LiveViewWeb.Step.Control.New.render(

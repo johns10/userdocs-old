@@ -15,13 +15,13 @@ defmodule LiveViewWeb.Page.Body do
       [
         content_tag(:div, [ class: "card" ]) do
           [
-            Steps.Header.render(assigns, page),
+            Steps.Header.render(assigns, "page", page.id),
             if page.id in assigns.active_steps do
               new_step_id = assigns.current_changesets.new_page_steps[page.id]
-              Logger.debug("rendering steps header")
-              Logger.debug(inspect(assigns.current_changesets))
-              Logger.debug(new_step_id)
-              Logger.debug(page.id)
+              #Logger.debug("rendering steps header")
+              #Logger.debug(inspect(assigns.current_changesets))
+              #Logger.debug(new_step_id)
+              #Logger.debug(page.id)
               [
                 content_tag(:ul, [ class: "card-body" ]) do
                   content_tag(:ul, [ class: "list-group" ]) do

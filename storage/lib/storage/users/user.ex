@@ -6,8 +6,8 @@ defmodule Storage.Users.User do
     pow_user_fields()
 
     many_to_many(
-      :user,
-      User,
+      :team,
+      Storage.Team,
       join_through: "team_member",
       on_replace: :delete
     )

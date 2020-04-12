@@ -19,7 +19,7 @@ defmodule LiveViewWeb.Step.Event do
   end
 
   def handle_event("step::expand", data, socket)  do
-    Logger.debug("It expands or un-expands the project step")
+    Logger.debug("It expands or un-expands the step")
     step_id = Helpers.get_id(data["step-id"])
     assigns = Userdocs.Step.expand(socket.assigns, step_id)
     { :noreply, assign(socket, assigns) }
@@ -47,6 +47,8 @@ defmodule LiveViewWeb.Step.Event do
 
   def handle_event("step::reorder_start", data, socket) do
     step_id = Helpers.get_id(data["step-id"])
+    Logger.debug("Starting Reorder")
+    Logger.debug(inspect(data))
     assigns = Userdocs.Step.reorder_start(
       socket.assigns, data, :drag)
     { :noreply, assign(socket, assigns) }
@@ -69,11 +71,6 @@ defmodule LiveViewWeb.Step.Event do
     step_id = Helpers.get_id(data["step-id"])
     assigns = Userdocs.Step.reorder_end(socket.assigns, form_data, step_id)
     {:noreply, assign(socket, assigns) }
-  end
-
-  def handle_event("step::toggle_version_step_menu", data, socket) do
-    assigns = Userdocs.Step.toggle_version_step_menu(socket.assigns)
-    {:noreply, assign(socket, assigns)}
   end
 
   def handle_event("step::cancel", data, socket) do
