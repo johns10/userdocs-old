@@ -9,6 +9,7 @@ defmodule LiveViewWeb.Page.Body do
   alias LiveViewWeb.Steps
   alias LiveViewWeb.Annotations
   alias LiveViewWeb.InputHelpers
+  alias LiveViewWeb.Elements
 
   def render(assigns, page) do
     content_tag(:div, [ class: "card-body"]) do
@@ -39,14 +40,14 @@ defmodule LiveViewWeb.Page.Body do
         end,
         content_tag(:div, [ class: "card" ]) do
           [
-            Page.Elements.Header.render(assigns, page),
+            Elements.Header.render(assigns, page),
             if page.id in assigns.active_page_elements do
               [
                 content_tag(:ul, [ class: "card-body" ]) do
-                  Page.Elements.Body.render(assigns, page)
+                  Elements.Body.render(assigns, page)
                 end,
                 content_tag(:div, [ class: "card-footer" ]) do
-                  Page.Elements.Footer.render(assigns, page)
+                  Elements.Footer.render(assigns, page)
                 end
               ]
             else

@@ -1,4 +1,4 @@
-defmodule LiveViewWeb.Page.Elements.Body do
+defmodule LiveViewWeb.Elements.Body do
   # use LiveViewWeb, :view
   use Phoenix.LiveView
   use Phoenix.HTML

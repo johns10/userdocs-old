@@ -1,4 +1,4 @@
-defmodule LiveViewWeb.Page.Elements.Footer do
+defmodule LiveViewWeb.Elements.Footer do
   # use LiveViewWeb, :view
   use Phoenix.LiveView
   use Phoenix.HTML
