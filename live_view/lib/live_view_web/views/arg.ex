@@ -38,8 +38,8 @@ defmodule LiveViewWeb.ArgView do
   end
 
   def render(arg = "element", value, f, id, assigns) do
-    Logger.debug("Rendering Element Form")
-    Logger.debug(id)
+    #Logger.debug("Rendering Element Form")
+    #Logger.debug(id)
     element_id = "step-" <> id <> "-" <> arg
     step = Data.get_one(assigns, :step, String.to_integer(id))
     page = Data.get_one(assigns, :page, step.page_id)
@@ -54,6 +54,32 @@ defmodule LiveViewWeb.ArgView do
         select(f, :value, select_list, [
           class: "form-control p-2",
           id: element_id,
+          value: value
+        ])
+      ]
+    end
+  end
+
+  def render(arg = "content", value, f, id, assigns) do
+    Logger.debug("Rendering Content Form")
+    Logger.debug(id)
+    content_id = "step-" <> id <> "-" <> arg
+    step = Data.get_one(assigns, :step, String.to_integer(id))
+    page = Data.get_one(assigns, :page, step.page_id)
+    version = Data.get_one(assigns, :version, page.version_id)
+    project = Data.get_one(assigns, :project, version.project_id)
+    team = Data.get_one(assigns, :team, project.team_id)
+    contents = Data.children(assigns, :team_id, team, :content)
+    select_list = Data.select(contents, "")
+    content_tag(:div, [ class: "col-sm-3 my-1" ]) do
+      [
+        content_tag(:label, [ for: id ]) do
+          arg
+        end,
+        hidden_input(f, :key, [ value: arg ]),
+        select(f, :value, select_list, [
+          class: "form-control p-2",
+          id: content_id,
           value: value
         ])
       ]

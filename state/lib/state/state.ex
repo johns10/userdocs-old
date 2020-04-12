@@ -123,7 +123,7 @@ defmodule State.State do
       %Storage.StepType{
         id: 6,
         name: "Apply Annotation",
-        args: [ "element", "annotation_type" ]
+        args: [ "annotation" ]
       }
     ],
     element: [
