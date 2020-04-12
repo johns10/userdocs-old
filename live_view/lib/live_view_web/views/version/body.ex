@@ -47,12 +47,7 @@ defmodule LiveViewWeb.Version.Body do
             [
               Pages.Header.render(assigns),
               Pages.Body.render(assigns, Version.Constants.current(assigns)),
-              """
-              _pages_menu_control =
-                content_tag(:div, [class: "card-footer"]) do
-                  LiveViewWeb.Version.PagesControl.render(assigns, Version.Constants.current(assigns))
-                end
-                """
+              Pages.Footer.render(assigns, Version.Constants.current_id(assigns))
             ]
           end
         end

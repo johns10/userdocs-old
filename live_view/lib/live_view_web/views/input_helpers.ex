@@ -3,6 +3,8 @@ defmodule LiveViewWeb.InputHelpers do
 
   alias LiveViewWeb.Helpers
 
+  require Logger
+
   def input(form, field, opts \\ []) do
     type = opts[:using] || Phoenix.HTML.Form.input_type(form, field)
     placeholder = opts[:placeholder] || Phoenix.HTML.Form.input_type(form, field)
@@ -31,17 +33,14 @@ defmodule LiveViewWeb.InputHelpers do
   end
 
   def button_new(type, parent_id \\ nil, parent_type \\ nil, disabled \\ false) do
-    IO.inspect(disabled)
-    content_tag(
-      :button,
-      "New " <> String.capitalize(type),
+    test = content_tag(:button, [
       type: "button",
       phx_click: type <> "::new",
       class: "btn btn-success btn-lg",
       phx_value_parent_id: parent_id,
       phx_value_parent_type: parent_type,
       disabled: disabled
-    )
+    ]) do "New " <> String.capitalize(parent_type) end
   end
 
   def button_save(form, label \\ "Save") do
